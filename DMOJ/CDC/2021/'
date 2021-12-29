@@ -1,0 +1,21 @@
+for _ in range(int(input())):
+    num = list(input())
+    k = int(input())
+    rem = []
+
+    s,l = 0,1
+    for l in range(k):
+        for i in range(s, len(num)-1):
+            if int(num[i]) > int(num[i+1]):
+                rem.append(num.pop(i))
+                s = i-1
+                break
+        l+=1
+        if s == len(num)-2:
+            break
+
+    rem.sort()
+    if l!=k and int(num[-1]) > int(rem[0]):
+        rem.append(num.pop())
+
+    print(''.join(num) + ''.join(sorted(rem)))

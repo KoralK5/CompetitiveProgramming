@@ -1,0 +1,2 @@
+print("case")
+input()
