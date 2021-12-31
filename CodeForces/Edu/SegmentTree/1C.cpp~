@@ -102,10 +102,10 @@ struct segTree {
 	}
 
 	long long calc(int l, int r, int x, int lx, int rx) {
-		if (lx >= r || l >= rx) return 0; // IF CALC MIN, USE INT_MAX
+		if (lx >= r || l >= rx) return INT_MAX; // IF CALC MIN, USE INT_MAX
 		if (lx >= l && rx <= r) return tree[x];
 		int mid = (lx + rx)/2;
-		long long lChild= calc(l, r, 2*x+1, lx, mid);
+		long long lChild = calc(l, r, 2*x+1, lx, mid);
 		long long rChild = calc(l, r, 2*x+2, mid, rx);
 		return operation(lChild, rChild);
 	}
@@ -115,31 +115,31 @@ struct segTree {
 		return calc(l, r, 0, 0, size);
 	}
 };
-
-pair<int, int> minVal = {1e9, 0};
  
 void solve() {
 	int n, m; cin >> n >> m;
-	vi a[n];
+	segTree st;
+	vi a(n);
 	FOR (i, 0, n) cin >> a[i];
 
-	segTree st;
 	st.init(n);
+	st.build(a);
 
-	int op, i, v, l,  r;
+	int op, i, v, l, r, mn;
 	FOR (j, 0, m) {
 		cin >> op;
 		if (op == 1) {
-			cin >> i, v;
+			cin >> i >> v;
 			st.set(i, v);
 		}
 		else {
 			cin >> l >> r;
-			st.calc(l, r);
+			mn = st.calc(l, r);
+			cout << mn << nl;
 		}
 	}
 }
- 
+
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);

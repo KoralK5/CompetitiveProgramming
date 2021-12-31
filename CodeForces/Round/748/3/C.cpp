@@ -33,13 +33,12 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define sz(x) (int)(x).size()
 #define mp make_pair
 #define pb push_back
-#define f first
-#define s second
+#define fir first
+#define sec second
 #define lbound lower_bound
 #define ubound upper_bound
 #define all(x) x.begin(), x.end()
 #define ins insert
-#define inside(a, b) (find(b.begin(), b.end(), a) != b.end())
  
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
@@ -49,23 +48,52 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
-vector<string> divs = {"00", "25", "50", "75"};
 
-void solve() {
-	string n; cin>>n;
-	int ans=0;
-	string curr;
-	for (int i=sz(n)-2; i>=0; i-=2) {
-		curr = n[i] + n[i+1];
-		if (inside(curr, divs)) {
-			break;
-		}
-		else {
-			ans++;
+int n, k;
+vi mice;
+
+int distRem(int esc) {
+	int cat=0;
+	FOR (i, 0, esc-1) {
+		cat += n-mice[i];
+		if (cat >= mice[esc-1]) {
+			return -1;
 		}
 	}
-	cout<<ans<<nl;
+	return n-cat;
+}
+ 
+void solve() {
+	// binary search
+	cin >> n >> k;
+	int curr;
+	mice.clear();
+	FOR (i, 0, k) {
+		cin >> curr;
+		mice.pb(curr);
+	}
+	sort(all(mice), greater<int>());
+
+    int l=0, r=mice.size(), mid=0, dist;
+    while (l <= r) {
+        mid = (l+r)/2;
+		dist = distRem(mid);
+        if (dist == 1) {
+			cout << mid << nl;
+			return;
+		}
+        if (dist > 1) {
+			l = mid+1;
+			if (distRem(l) == -1) {
+				cout << mid << nl;
+				return;
+			}
+		}
+		else {
+			r = mid-1;
+		}
+    }
+    cout << mid << nl;
 }
  
 int main() {
@@ -73,7 +101,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }

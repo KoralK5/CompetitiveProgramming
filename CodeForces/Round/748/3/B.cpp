@@ -23,7 +23,7 @@ typedef vector<cd> vcd;
 template<class T> using pq = priority_queue<T>;
 template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  
-#define FOR(i, a, b) for (int i=a; i<(b); i++)
+#define FOR(i, a, b) for (ll i=a; i<(b); i++)
 #define F0R(i, a) for (int i=0; i<(a); i++)
 #define FORd(i,a,b) for (int i = (b)-1; i >= a; i--)
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
@@ -39,6 +39,7 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define ubound upper_bound
 #define all(x) x.begin(), x.end()
 #define ins insert
+#define inside(a, b) (find(b.begin(), b.end(), a) != b.end())
  
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
@@ -48,16 +49,30 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
+
 void solve() {
-	int a, b, c; cin>>a>>b>>c;
-	int mx = max(a, max(b, c));
-	if ((a==mx) + (b==mx) + (c==mx) == 1) {
-		cout<<mx-a+(a!=mx)<<" "<<mx-b+(b!=mx)<<" "<<mx-c+(c!=mx);
-	} else {
-		cout<<mx-a+1<<" "<<mx-b+1<<" "<<mx-c+1;
+	string s; cin>>s;
+	// find distance from first digit to second;
+	// {"00", "25", "50", "75"};
+	ll zerLoc=-1, fivLoc=-1, size=sz(s), ans=1e18;
+	FOR (i, 0, size) {
+		if (s[i] == '0') {
+			if (zerLoc != -1) {
+				ans = min(ans, i-zerLoc-1+size-i-1);
+			}
+			zerLoc = i;
+		}
+		else if (s[i] == '5') {
+			if (fivLoc != -1) {
+				ans = min(ans, i-fivLoc-1+size-i-1);
+			}
+			zerLoc = i;
+		}
+		else if (s[i] == '2' || s[i] == '7') {
+			fivLoc = i;
+		}
 	}
-	cout<<nl;
+	cout << ans << nl;
 }
  
 int main() {
