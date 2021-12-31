@@ -33,8 +33,8 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define sz(x) (int)(x).size()
 #define mp make_pair
 #define pb push_back
-#define fir first
-#define sec second
+#define f first
+#define s second
 #define lbound lower_bound
 #define ubound upper_bound
 #define all(x) x.begin(), x.end()
@@ -50,8 +50,11 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	string n;
+	while (cin >> n) {
+		if (n != "42") cout<<n<<nl;
+		else return;
+	}
 }
  
 int main() {
@@ -66,3 +69,4 @@ int main() {
  
 	return 0;
 }
+

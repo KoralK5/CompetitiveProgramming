@@ -50,8 +50,23 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	string s; cin >> s;
+	int l = sz(s);
+	unordered_map<char, int> a;
+	unordered_map<char, int> b;
+	for (char i : s.substr(0, l/2)) {
+		a[i]++;
+	}
+	for (char i : s.substr((l+1)/2, l/2)) {
+		b[i]++;
+	}
+	for (auto &i : a) {
+		if (i.sec != b[i.fir]) {
+			cout<<"NO\n";
+			return;
+		}
+	}
+	cout<<"YES\n";
 }
  
 int main() {
@@ -59,10 +74,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+    cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

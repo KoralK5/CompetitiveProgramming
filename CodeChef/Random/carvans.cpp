@@ -50,8 +50,18 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	int ans=1, curr, speed;
+	cin >> speed;
+	FOR (i, 1, n) {
+		cin >> curr;
+		if (speed >= curr) {
+			ans++;
+		} else {
+			speed = curr;
+		}
+	}
+	cout<<ans<<nl;
 }
  
 int main() {
@@ -59,10 +69,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+    cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

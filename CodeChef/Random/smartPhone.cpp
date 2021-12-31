@@ -50,8 +50,15 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	vl b(n);
+	FOR (i, 0, n) cin >> b[i];
+	sort(all(b), greater<int>());
+	ll mx = 0;
+	for (int i=0; i<n; i++) {
+		mx = max(mx, b[i]*(i+1));
+	}
+	cout<<mx;
 }
  
 int main() {
@@ -66,3 +73,4 @@ int main() {
  
 	return 0;
 }
+

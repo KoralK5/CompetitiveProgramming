@@ -33,8 +33,8 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define sz(x) (int)(x).size()
 #define mp make_pair
 #define pb push_back
-#define fir first
-#define sec second
+#define f first
+#define s second
 #define lbound lower_bound
 #define ubound upper_bound
 #define all(x) x.begin(), x.end()
@@ -50,8 +50,18 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	string n; cin >> n;
+	int size = sz(n);
+	bool zer=false;
+	FOR (i, 0, size) {
+		if (!zer && n[size-i-1] == '0') {
+			continue;
+		} else {
+			zer = true;
+		}
+		cout<<n[size-i-1];
+	}
+	cout<<nl;
 }
  
 int main() {
@@ -59,10 +69,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+    cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+
