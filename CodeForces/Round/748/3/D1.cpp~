@@ -51,8 +51,22 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	// each idx, update gcd with difference
+	int prev, curr, div=-1;
+	bool same=true;
+	cin >> prev;
+	FOR (i, 1, n) {
+		cin >> curr;
+		if (div == -1) {
+			div = abs(curr-prev);
+		} else {
+			div = gcd(div, abs(curr-prev));
+		}
+		if (curr != prev) same=false;
+		prev = curr;
+	}
+	cout << (same?-1:div) << nl;
 }
  
 int main() {
@@ -60,7 +74,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+    cin >> T;
     while(T--) {
         solve();
     }
