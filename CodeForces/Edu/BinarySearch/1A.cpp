@@ -50,10 +50,34 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+int binarySearch(vi arr, int val) {
+    int l=0, r=arr.size()-1, mid;
+    while (l <= r) {
+        mid = (l+r)/2;
+        if (arr[mid] == val) {
+			return mid;
+		}
+        if (arr[mid] < val) {
+			l = mid+1;
+		}
+		else {
+			r = mid-1;
+		}
+    }
+    return -1;
+}
  
 void solve() {
- 
- 
+	int n, k; cin >> n >> k;
+	vi a(n);
+	FOR (i, 0, n) cin >> a[i];
+
+	int val;
+	FOR (i, 0, k) {
+		cin >> val;
+		cout << ((binarySearch(a, val)==-1)?"NO":"YES") << nl;
+	}
 }
  
 int main() {
@@ -68,3 +92,4 @@ int main() {
  
 	return 0;
 }
+

@@ -50,10 +50,19 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+vi primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199};
+int size = sz(primes);
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	FOR (i, 0, size) {
+		if (find(all(primes), n-primes[i]) == primes.end()) {
+			cout << "YES" << nl;
+			return;
+		}
+	}
+	cout << "NO" << nl;
 }
  
 int main() {
@@ -61,10 +70,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

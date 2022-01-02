@@ -40,7 +40,6 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define all(x) x.begin(), x.end()
 #define ins insert
 #define gcd(a, b) __gcd(a, b)
-#define lcm(a, b) (a*b)/gcd(a, b)
  
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
@@ -52,8 +51,8 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int l, b; cin >> l >> b;
+	cout << gcd(l, b) << nl;
 }
  
 int main() {
@@ -61,10 +60,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

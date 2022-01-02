@@ -52,8 +52,11 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	ll n, a, b, k; cin >> n >> a >> b >> k;
+	// lcm: a=2, b=3, then n/(2*3) is the amount that divide both
+	if(b < a) swap(a,b);
+	ll both = b % a == 0 ? b : a*b;
+	cout << (((n/a + n/b - 2*(n/both)) >= k)?"Win":"Lose") << nl;
 }
  
 int main() {
@@ -61,10 +64,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+
