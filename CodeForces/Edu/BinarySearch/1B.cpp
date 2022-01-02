@@ -36,9 +36,9 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define pb push_back
 #define fir first
 #define sec second
-#define ins insert
 #define lbound(a, v) lower_bound(all(a), v)-a.begin()
 #define ubound(a, v) upper_bound(all(a), v)-a.begin()
+#define ins insert
 #define gcd(a, b) __gcd(a, b)
 #define lcm(a, b) (a*b)/gcd(a, b)
  
@@ -52,8 +52,15 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n, k; cin >> n >> k;
+	vll a(n);
+	FOR (i, 0, n) cin >> a[i];
+
+	ll val;
+	FOR (i, 0, k) {
+		cin >> val;
+		cout << ubound(a, val) << nl;
+	}
 }
  
 int main() {
@@ -68,3 +75,4 @@ int main() {
  
 	return 0;
 }
+

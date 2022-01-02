@@ -31,14 +31,14 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define uid(a, b) uniform_int_distribution<int>(a, b)(rng)
  
 #define sz(x) (int)(x).size()
+#define all(x) x.begin(), x.end()
 #define mp make_pair
 #define pb push_back
 #define fir first
 #define sec second
-#define lbound lower_bound
-#define ubound upper_bound
-#define all(x) x.begin(), x.end()
 #define ins insert
+#define lbound(a, v) lower_bound(all(a), v)-a.begin()
+#define ubound(a, v) upper_bound(all(a), v)-a.begin()
 #define gcd(a, b) __gcd(a, b)
 #define lcm(a, b) (a*b)/gcd(a, b)
  

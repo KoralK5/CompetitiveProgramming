@@ -52,8 +52,15 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n, k; cin >> n >> k;
+	vll a(n);
+	FOR (i, 0, n) cin >> a[i];
+
+	ll val;
+	FOR (i, 0, k) {
+		cin >> val;
+		cout << lbound(a, val)+1 << nl;
+	}
 }
  
 int main() {
@@ -68,3 +75,4 @@ int main() {
  
 	return 0;
 }
+
