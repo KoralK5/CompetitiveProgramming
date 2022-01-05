@@ -103,40 +103,67 @@ vector<int> sort_cyclic_shifts(string const& s) {
 }
 
 string s; 
-bool compare(string a, int idx) {
+int compare(string a, int idx) {
 	FOR (i, 0, sz(a)) {
-		if (s[idx+i] != a[i]) {
-			return false;
+		if (s[idx+i] > a[i]) {
+			return 1;
+		}
+		else if (s[idx+i] < a[i]) {
+			return -1;
 		}
 	}
-	return true;
+	return 0;
 }
- 
+
+vector<int> suffs;
+int binarySearch(string val) {
+    int l=0, r=suffs.size()-1, mid;
+    while (l <= r) {
+        mid = (l+r)/2;
+		int c = compare(val, suffs[mid]);
+        if (c == 0) {
+			return mid;
+		}
+        if (c == -1) {
+			l = mid+1;
+		}
+		else if (c == 1) {
+			r = mid-1;
+		}
+    }
+    return -1;
+} 
+
 void solve() {
 	cin >> s;
 	s += "$";
-    vector<int> suffs = sort_cyclic_shifts(s);
+    suffs = sort_cyclic_shifts(s);
 	int Q; cin >> Q;
 	string t; int k;
 	FOR (q, 0, Q) {
 		cin >> t >> k;
-		// find index
 		if (t[0] > s[suffs[sz(suffs)-1]]) {
 			cout << -1 << nl;
 			continue;
 		}
-		int i;
-		for (i=sz(suffs)-1; i>0; i--) {
-			if (compare(t, suffs[i])) {
-				break;
-			}
-		}
-		if (i == 0) {
+		// find index via bin search
+		// can't be i=0
+		int i = binarySearch(t);
+		if (i <= 0) {
 			cout << -1 << nl;
 			continue;
 		}
+
+		int j;
+		for (j=i; j<sz(suffs); j++) {
+			if (compare(t, suffs[j]) != 0) {
+				break;
+			}
+		}
+		i = j-1;
+
 		while (k > 0) {
-			if (!compare(t, suffs[i])) {
+			if (compare(t, suffs[i]) != 0) {
 				break;
 			}
 			i--;
