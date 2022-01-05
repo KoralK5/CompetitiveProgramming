@@ -1,6 +1,6 @@
 /*
 ID: Koral Kulacoglu
-TASK: test
+TASK: ride
 LANG: C++                 
 */
 
@@ -20,14 +20,12 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
 typedef vector<pll> vpll;
 typedef vector<cd> vcd;
-
+ 
 template<class T> using pq = priority_queue<T>;
 template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  
@@ -60,14 +58,24 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+ 	ifstream cin("ride.in");
+	ofstream cout("ride.out");
+	
+	string a, b; cin >> a >> b;
+	ll av=1, bv=1;
+	FOR (i, 0, sz(a)) {
+		av*=(ll)a[i]-64;
+	}
+	FOR (i, 0, sz(b)) {
+		bv*=(ll)b[i]-64;
+	}
+	cout << ((av%47==bv%47)?"GO":"STAY") << nl;
 }
  
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
- 
+	
     int T = 1;
 //    cin >> T;
     while(T--) {
@@ -76,3 +84,4 @@ int main() {
  
 	return 0;
 }
+

@@ -58,10 +58,42 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+int n, k;
+vs scores;
+
+bool bitExists(int n, int k) {
+	return n & (1 << (k-1));
+}
+
+int score(int perms) {
+	int ans=k;
+	FOR (i, 0, n) {
+		int cur=0;
+		FOR (j, 0, k) {
+			bool exists = bitExists(perms, j);
+			if ((exists && scores[i][j]=='F') || (!exists && scores[i][j]=='T')) {
+				cur++;
+			}
+		}
+		ans = min(ans, cur);
+	}
+	return ans;
+}
  
 void solve() {
- 
- 
+	cin >> n >> k;
+	string curr;
+	FOR (i, 0, n) {
+		cin >> curr;
+		scores.pb(curr);
+	}
+
+	int ans=0;
+	FOR (perms, 0, 1<<k) {
+		ans = max(ans, score(perms));
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -76,3 +108,4 @@ int main() {
  
 	return 0;
 }
+

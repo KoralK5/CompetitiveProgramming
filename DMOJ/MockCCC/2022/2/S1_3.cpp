@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,49 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n, k, mv=1e9; cin >> n >> k;
+	vi per(n, 0);
+	vector<vi> cost(k, vi(2, 0));
+	FOR (i, 0, k) cost[i][1] = i;
+	vector<string> grades(n);
+	FOR (i, 0, n) {
+		cin >> grades[i];
+		FOR (j, 0, k) {
+			if (grades[i][j] == 'T') {
+				per[i]++;
+				cost[j][0]++;
+			}
+		}
+		mv = min(mv, per[i]);
+	}
+	sort(all(cost));
+	int minVal;
+	FOR (j, 0, k) {
+		j = cost[j][1];
+		minVal=1e9;
+		FOR (i, 0, n) {
+			if (grades[i][j] == 'F') {
+				minVal = min(minVal, per[i]+1);
+			}
+			else {
+				minVal = min(minVal, per[i]-1);
+			}
+		}
+		if (minVal > mv) {
+			mv = minVal;
+			FOR (i, 0, n) {
+				if (grades[i][j] == 'F') {
+					grades[i][j] = 'T';
+					per[i]++;
+				}
+				else {
+					grades[i][j] = 'F';
+					per[i]--;
+				}
+			}
+		}
+	}
+	cout << mv << nl;
 }
  
 int main() {
@@ -76,3 +115,4 @@ int main() {
  
 	return 0;
 }
+

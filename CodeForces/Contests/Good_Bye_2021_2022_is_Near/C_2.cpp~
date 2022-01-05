@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -58,21 +56,34 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+const int N = 111;
+int n;
+int a[N];
  
 void solve() {
- 
- 
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++)
+		scanf("%d", &a[i]);
+	int ans = 1;
+	for (int i = 0; i < n; i++)
+		for (int j = i + 1; j < n; j++) {
+			int cur = 0;
+			for (int k = 0; k < n; k++) {
+				if ((i - j) * (a[i] - a[k]) == (a[i] - a[j]) * (i - k)) cur++;
+			}
+			ans = max(ans, cur);
+		}
+	printf("%d\n", n - ans);
 }
  
 int main() {
-    cin.tie(0)->sync_with_stdio(0); 
-    cin.exceptions(cin.failbit);
- 
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

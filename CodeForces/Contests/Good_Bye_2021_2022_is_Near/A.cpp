@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,20 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n, curr; cin >> n;
+	unordered_map<int, int> freqs;
+	FOR (i, 0, n) {
+		cin >> curr;
+		freqs[curr]++;
+	}
+	int ans=0;
+	trav (num, freqs) {
+		ans++;
+		if (freqs.find(-num.fir)==freqs.end() && num.sec>1) {
+			ans++;
+		}
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -69,10 +79,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

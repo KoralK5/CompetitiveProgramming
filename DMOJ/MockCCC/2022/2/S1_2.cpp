@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,54 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n, k; cin >> n >> k;
+	vi per(n), sco(k);
+	vector<string> res(n);
+	FOR (i, 0, n) {
+		cin >> res[i];
+		FOR (j, 0, k) {
+			if (res[i][j] == 'T') {
+				per[i]++;
+				sco[j]++;
+			}
+		}
+	}
+	FOR (t, 0, 5000) {
+		int mIdx=0, mVal=1e4+1;
+		FOR (i, 0, n) {
+			if (per[i] < mVal) {
+				mVal = per[i];
+				mIdx = i;
+			}
+		}
+		int mIdx2=0, mVal2=1e4+1;
+		FOR (i, 0, k) {
+			if (res[mIdx][i] == 'F' && sco[i] < mVal2) {
+				mVal2 = sco[i];
+				mIdx2 = i;
+			}
+		}
+		// cout << mIdx << " " << mIdx2;
+		if (res[mIdx][mIdx2] == 'F') {
+			FOR (i, 0, n) {
+				if (res[i][mIdx2] == 'T') {
+					res[i][mIdx2] = 'F';
+					sco[mIdx2]--;
+					per[i]--;
+				}
+				else {
+					res[i][mIdx2] = 'T';
+					sco[mIdx2]++;
+					per[i]++;
+				}
+			}
+		}
+	}
+	int ans=1e4+1;
+	FOR (i, 0, n) {
+		ans = min(ans, per[i]);
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -76,3 +120,4 @@ int main() {
  
 	return 0;
 }
+

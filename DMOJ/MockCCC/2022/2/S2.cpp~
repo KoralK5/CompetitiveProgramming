@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -58,10 +56,38 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+int n, k;
+vector<string> s;
+
+bool allBefore(char a, char b) {
+	trav (votes, s) {
+		if (votes.find(a) > votes.find(b)) {
+			return false;
+		}
+	}
+	return true;
+}
  
 void solve() {
- 
- 
+	cin >> n >> k;
+	string curr;
+	FOR (i, 0, n) {
+		cin >> curr;
+		s.pb(curr);
+	}
+
+	vi dp(k, 1);
+	int ans=1;
+	FOR (i, 1, k) {
+		FOR (j, 0, i) {
+			if (dp[j]>=dp[i] && allBefore(s[0][j], s[0][i])) {
+				dp[i] = dp[j]+1;
+			}
+		}
+		ans = max(ans, dp[i]);
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -76,3 +102,4 @@ int main() {
  
 	return 0;
 }
+

@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -58,10 +56,51 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+int n, k; 
+int minScore(vector<string> &s) {
+	int res=1e9, score;
+	FOR (i, 0, n) {
+		score = 0;
+		FOR (j, 0, k) {
+			score += (s[i][j]=='T');
+		}
+		res = min(res, score);
+	}
+	return res;
+}
  
 void solve() {
- 
- 
+	cin >> n >> k;
+	vector<string> quiz(n);
+	FOR (i, 0, n) cin >> quiz[i];
+
+	// change index i and compare each change to j
+	int ans=minScore(quiz);
+	vector<string> curQuiz;
+	FOR (i, 0, k) {
+		FOR (j, 0, n) {
+			if (quiz[j][i] == 'T') {
+				quiz[j][i] = 'F';
+			}
+			else {
+				quiz[j][i] = 'T';
+			}
+		}
+		FOR (j, i+1, k) {
+			curQuiz = quiz;
+			FOR (v, 0, n) {
+				if (curQuiz[v][j] == 'T') {
+					curQuiz[v][j] = 'F';
+				}
+				else {
+					curQuiz[v][j] = 'T';
+				}
+			}
+			ans = min(ans, minScore(curQuiz));
+		}
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -76,3 +115,4 @@ int main() {
  
 	return 0;
 }
+

@@ -1,6 +1,6 @@
 /*
 ID: Koral Kulacoglu
-TASK: test
+TASK: gift1
 LANG: C++                 
 */
 
@@ -20,14 +20,12 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
 typedef vector<pll> vpll;
 typedef vector<cd> vcd;
-
+ 
 template<class T> using pq = priority_queue<T>;
 template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  
@@ -60,8 +58,30 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	ifstream cin("gift1.in");
+	ofstream cout("gift1.out");
+	
+	int n; cin >> n;
+	unordered_map<string, int> ppl;
+	vector<string> order(n);
+	FOR (i, 0, n) {
+		cin >> order[i];
+	}
+
+	int c, p;
+	string giv, rec;
+	FOR (i, 0, n) {
+		cin >> giv >> c >> p;
+		ppl[giv] -= c;
+		if (p == 0) continue;
+		ppl[giv] += c%p;
+		c /= p;
+		FOR (i, 0, p) {
+			cin >> rec;
+			ppl[rec] += c;
+		}
+	}
+	trav(i, order) cout << i << " " << ppl[i] << nl;
 }
  
 int main() {
@@ -76,3 +96,4 @@ int main() {
  
 	return 0;
 }
+

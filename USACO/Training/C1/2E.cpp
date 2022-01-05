@@ -1,6 +1,6 @@
 /*
 ID: Koral Kulacoglu
-TASK: test
+TASK: beads
 LANG: C++                 
 */
 
@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,33 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	ifstream cin("beads.in");
+	ofstream cout("beads.out");
+	
+	int n, curr, j, ans=0; cin >> n;
+	string s; cin >> s;
+	char col;
+	bool change;
+	FOR (i, 0, n) {
+		col = 'w';
+		curr = 0;
+		change = false;
+		FOR (cj, i, i+n) {
+			j = cj%n;
+			if (s[j]!='w' && col!='w' && s[j]!=col) {
+				if (change) {
+					break;
+				}
+				change = true;
+			}
+			if (s[j] != 'w') {
+				col = s[j];
+			}
+			curr++;
+		}
+		ans = max(ans, curr);
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -76,3 +99,4 @@ int main() {
  
 	return 0;
 }
+

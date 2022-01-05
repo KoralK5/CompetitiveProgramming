@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,29 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	string s; cin >> s;
+	string ans = ""; ans += s[0];
+
+	// keep track of second smallest num
+	char small = 'z';
+	bool changed = false;
+	FOR (i, 1, n) {
+		if (s[i] < ans[i-1]) {
+			small = ans[i-1];
+			ans += s[i];
+			changed = true;
+		}
+		else if (s[i] == ans[i-1] && s[i] < small && changed) {
+			ans += s[i];
+		}
+		else {
+			break;
+		}
+	}
+	cout << ans;
+	reverse(ans.begin(), ans.end());
+	cout << ans << nl;
 }
  
 int main() {
@@ -69,10 +88,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

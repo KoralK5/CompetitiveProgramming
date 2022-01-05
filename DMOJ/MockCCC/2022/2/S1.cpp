@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,36 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n, k; cin >> n >> k;
+	vi correct(k, 0);
+	vi perAns(n, 0);
+	vector<string> per(n);
+	FOR (i, 0, n) {
+		cin >> per[i];
+		FOR (j, 0, k) {
+			if (per[i][j] == 'T') {
+				correct[j]++;
+				perAns[i]++;
+			}
+		}
+	}
+	int minT=11, idx=0;
+	FOR (i, 0, k) {
+		if (correct[i] < minT) {
+			minT = correct[i];
+			idx = i;
+		}
+	}
+	int ans=11;
+	FOR (i, 0, n) {
+		if (per[i][idx] == 'T') {
+			ans = min(ans, perAns[i]-1);
+		}
+		else {
+			ans = min(ans, perAns[i]+1);
+		}
+	}
+	cout << ans;
 }
  
 int main() {
@@ -76,3 +102,4 @@ int main() {
  
 	return 0;
 }
+

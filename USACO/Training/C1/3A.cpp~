@@ -1,6 +1,6 @@
 /*
 ID: Koral Kulacoglu
-TASK: test
+TASK: milk2
 LANG: C++                 
 */
 
@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -58,10 +56,39 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+bool small(vi &a, vi &b) {
+	return a[0] < b[0];
+}
  
 void solve() {
- 
- 
+	ifstream cin("milk2.in");
+	ofstream cout("milk2.out");
+	
+	int n; cin >> n;
+	vector<vi> days;
+	int s, e;
+	FOR (i, 0, n) {
+		cin >> s >> e;
+		FOR (i, 0, sz(days)) {
+			if (!(s>days[i][1]) && !(e<days[i][0])) {
+				s = min(days[i][0], s);
+				e = max(days[i][1], e);
+				days.erase(days.begin()+i);
+				i--;
+			}
+		}
+		days.pb({s, e});
+	}
+	sort(all(days), small);
+	int milked=0, nMilked=0, size = sz(days);
+	FOR (i, 0, size) {
+		milked = max(milked, days[i][1]-days[i][0]);
+		if (i != size-1) {
+			nMilked = max(nMilked, days[i+1][0]-days[i][1]);
+		}
+	}
+	cout << milked << " " << nMilked << nl;
 }
  
 int main() {
@@ -76,3 +103,4 @@ int main() {
  
 	return 0;
 }
+

@@ -20,8 +20,6 @@ typedef pair<ll,ll> pll;
 typedef pair<ld,ld> pld;
  
 typedef vector<int> vi;
-typedef vector<string> vs;
-typedef vector<char> vc;
 typedef vector<ld> vld;
 typedef vector<ll> vll;
 typedef vector<pi> vpi;
@@ -60,8 +58,34 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	// lol literally arithmetic sequence
+	int n; cin >> n;
+	vi a(n);
+	FOR (i, 0, n) cin >> a[i];
+	sort(all(a));
+
+	unordered_map<int, int> freqs;
+	FOR (i, 1, n) {
+		freqs[a[i]-a[i-1]]++;
+	}
+
+	pi ch={0, 0};
+	trav (i, freqs) {
+		if (i.sec > ch.sec) {
+			ch.fir = i.fir;
+			ch.sec = i.sec;
+		}
+	}
+
+	int ans=0, d1, d2;
+	FOR (i, 1, n-1) {
+		d1 = (a[i]-a[i-1]!=ch.fir);
+		d2 = (a[i+1]-a[i]!=ch.fir);
+		if (d1 || d2) {
+			ans++;
+		}
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -69,10 +93,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+
