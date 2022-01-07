@@ -60,36 +60,45 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
-	int n, w; cin >> n >> w;
-	vi weights(n);
-	FOR (i, 0, n) cin >> weights[i];
+	int n, m; cin >> n >> m;
+	string a, b; cin >> a >> b;
 
-	sort(all(weights));
-	int num=ubound(weights, w), lw=w/2;
-	if (weights[num] >= lw/2) {
-		cout << weights[num] << ' ' << lw << nl;
-		return;
-		cout << 1 << nl;
-		cout << num << nl;
-		return;
-	}
-
-	int ans=0, i;
-	for (i=0; i<n; i++) {
-		ans += weights[i];
-		if (ans >= lw && ans <= w) {
-			break;
+	vector<vi> dp(n, vi(m, 0));
+	int ans=0;
+	FOR (i, 0, n) {
+		FOR (j, 0, m) {
+			if (a[i] == b[j]) {
+				if (i==0 && j!=0) {
+					dp[i][j] = dp[i][j-1]+2;
+				}
+				else if (j==0 && i!=0) {
+					dp[i][j] = dp[i-1][j]+2;
+				}
+				else if (j==0 && i==0) {
+					dp[i][j] = 2;
+				}
+				else {
+					dp[i][j] = max(dp[i-1][j]+2, dp[i][j-1]+2);
+				}
+			}
+			else {
+				if (i==0 && j!=0) {
+					dp[i][j] = dp[i][j-1]-1;
+				}
+				else if (j==0 && i!=0) {
+					dp[i][j] = dp[i-1][j]-1;
+				}
+				else if (j==0 && i==0) {
+					dp[i][j] = -2;
+				}
+				else {
+					dp[i][j] = max(dp[i-1][j], dp[i][j-1]) - 1;
+				}
+			}
+			ans = max(ans, dp[i][j]);
 		}
-		if (ans > w) {
-			cout << -1 << nl;
-			return;
-		}
 	}
-	cout << i << nl;
-	FOR (j, 0, i) {
-		cout << weights[i] << ' ';
-	}
-	cout << nl;
+	cout << ans;
 }
  
 int main() {
@@ -97,7 +106,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-	cin >> T;
+//    cin >> T;
     while(T--) {
         solve();
     }
