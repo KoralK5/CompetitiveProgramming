@@ -130,13 +130,13 @@ void solve() {
 				// mark everything in the path as visited
 				else {
 					while (true) {
+						if (visited[{x, y}]!=-1) break;
 						char loc=a[x][y];
 						if (loc!='D' && loc!='U' && loc!='R' && loc!='L') break;
 						int px=x, py=y;
-						x += (loc=='D')-(loc=='U');
+						x += (loc=='U')-(loc=='D');
 						y += (loc=='R')-(loc=='L');
-						if (visited[{x, y}]!=-1) break;
-						visited[{px, py}] = 0;
+						visited[{px, py}] = d;
 					}
 					if (a[x][y]=='.' && available(x, y)) {
 						visited[{x, y}] = d;
@@ -148,8 +148,7 @@ void solve() {
 	}
 	FOR (i, 0, n) {
 		FOR (j, 0, m) {
-			if (visited[{i,j}]!=0) {
-				cout << i << ' ' << j << ' ';
+			if (a[i][j] == '.') {
 				cout << visited[{i,j}] << nl;
 			}
 		}
