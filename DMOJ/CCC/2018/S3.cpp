@@ -88,6 +88,7 @@ void solve() {
 	vi start(3);
 	map<vi, int> visited;
 	string curr;
+	int size=0;
 	FOR (i, 0, n) {
 		cin >> curr;
 		a.pb(curr);
@@ -100,6 +101,7 @@ void solve() {
 			if (curr[j]!='W' && curr[j]!='C') {
 				visited[{i, j}] = -1;
 			}
+			size += curr[j] == '.';
 		}
 	}
 
@@ -130,6 +132,7 @@ void solve() {
 				// mark everything in the path as visited
 				else {
 					while (true) {
+						if (x<0 || x>=n || y<0 || y>=m) break;
 						if (visited[{x, y}]!=-1) break;
 						char loc=a[x][y];
 						if (loc!='D' && loc!='U' && loc!='R' && loc!='L') break;
@@ -138,13 +141,19 @@ void solve() {
 						y += (loc=='R')-(loc=='L');
 						visited[{px, py}] = d;
 					}
-					if (a[x][y]=='.' && available(x, y) && visited[{x,y}]==-1) {
+					if (x<0 || x>=n || y<0 || y>=m) break;
+					if (a[x][y]=='.' && visited[{x,y}]==-1 && available(x, y)) {
 						visited[{x, y}] = d;
 						q.push({x, y, d});
 					}
 				}
 			}
 		}
+	}
+	if (size == 2) {
+		cout << -1 << nl;
+		cout << -1 << nl;
+		return;
 	}
 	FOR (i, 0, n) {
 		FOR (j, 0, m) {
