@@ -138,7 +138,7 @@ void solve() {
 						y += (loc=='R')-(loc=='L');
 						visited[{px, py}] = d;
 					}
-					if (a[x][y]=='.' && available(x, y)) {
+					if (a[x][y]=='.' && available(x, y) && visited[{x,y}]==-1) {
 						visited[{x, y}] = d;
 						q.push({x, y, d});
 					}
