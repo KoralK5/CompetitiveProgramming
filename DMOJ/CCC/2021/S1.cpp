@@ -1,6 +1,6 @@
 /*
 ID: Koral Kulacoglu
-TASK: https://dmoj.ca/problem/ccc21s3
+TASK: https://dmoj.ca/problem/ccc21s1
 LANG: C++                 
 */
 
@@ -58,63 +58,18 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-int n;
-vector<vi> arr;
-ll cost(ll loc) {
-	ll res=0;
-	FOR (i, 0, n) {
-		ll p=arr[i][0], w=arr[i][1], d=arr[i][2];
-		// find meters left
-		ll m = abs(loc - p) - d;
-		if (m > 0) {
-			res += m*w;
-		}
-	}
-	return res;
-}
  
 void solve() {
-	cin >> n;
-	int p, w, d, l=1e9, r=0;
-	FOR (i, 0, n) {
-		cin >> p >> w >> d;
-		arr.pb({p,w,d});
-		l = min(l, p);
-		r = max(r, p);
-	}
-	/*
-	ll ans=1e14;
-	FOR (i, mi, ma+1) {
-		ans = min(ans, cost(i));
-	}
-	cout << ans;
-	*/
+	int n; cin >> n;
+	vector<long double> h(n+1), w(n);
+	FOR (i, 0, n+1) cin >> h[i];
+	FOR (i, 0, n) cin >> w[i];
 
-	// binary search min cost
-	// store precalculated
-	unordered_map<ll, ll> seen;
-	ll cm, cr, cl;
-    while (l <= r) {
-        ll mid = (l+r)/2;
-		cm = seen[mid]?seen[mid]:cost(mid);
-		cl = seen[mid-1]?seen[mid-1]:cost(mid-1);
-		cr = seen[mid+1]?seen[mid+1]:cost(mid+1);
-		seen[mid] = cm;
-		seen[mid-1] = cl;
-		seen[mid+1] = cr;
-        if ((cm < cr && cm < cl) || (cl==cr)) {
-			cout << cm;
-			return;
-		}
-        if (cl > cr) {
-			l = mid+1;
-		}
-		else {
-			r = mid-1;
-		}
-	} 
-	cout << cm;
+	long double area=0;
+	FOR (i, 0, n) {
+		area += w[i]*min(h[i], h[i+1]) + w[i]*(max(h[i], h[i+1])-min(h[i], h[i+1]))/2;
+	}
+	cout << fixed << setprecision(10) << area;
 }
  
 int main() {
