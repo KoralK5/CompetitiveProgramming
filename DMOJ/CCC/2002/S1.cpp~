@@ -59,64 +59,33 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
+void print(int p, int g, int r, int o) {
+	cout << "# of PINK is " << p << " ";
+	cout << "# of GREEN is " << g << " ";
+	cout << "# of RED is " << r << " ";
+	cout << "# of ORANGE is " << o << '\n';
+}
+ 
 void solve() {
-	int n; cin >> n;
-	/*
-	unordered_map<int, bool> nums;
-	FOR (i, 1, n+1) nums[i] = true;
-	vi primes;
-	int arr[n+1] = {0};
-   for (int i = 2; i <= n; i++) {
-      for (int j = i * i; j <= n; j+=i) {
-         arr[j - 1] = 1;
-      }
-   }
-   for (int i = 1; i <= n; i++) {
-      if (arr[i - 1] == 0)
-		  primes.pb(i);
-   }
+	int p, g, r, o, m;
+	cin >> p >> g >> r >> o >> m;
 
-	// greedy??
-	FOR (i, 1, n+1) {
-		trav (p, primes) {
-			if (nums[p-i]) {
-				nums[p-i] = false;
-				cout << p-i;
-				if (i!=n) cout << ' ';
+	int combs=0, tickets=1e9;
+	FOR (i, 0, m+1) {
+		FOR (j, 0, m+1) {
+			FOR (x, 0, m+1) {
+				FOR (y, 0, m+1) {
+					if (i*p + j*g + x*r + y*o == m) {
+						print(i, j, x, y);
+						combs++;
+						tickets=min(tickets, i+j+x+y);
+					}
+				}
 			}
 		}
 	}
-	*/
-	if (n==1) {
-		cout << "1\n";
-	}
-	else if (n==2) {
-		cout << "2 1\n";
-	}
-	else if (n==3) {
-		cout << "1 3 2\n";
-	}
-	else if (n==4) {
-		cout << "1 2 4 3\n";
-	}
-	else if (n==5) {
-		cout << "1 5 4 3 2\n";
-	}
-	else if (n==6) {
-		cout << "1 2 4 3 6 5\n";
-	}
-	else if (n==7) {
-		cout << "1 3 2 7 6 5 4\n";
-	}
-	else if (n==8) {
-		cout << "1 2 4 3 8 7 6 5\n";
-	}
-	else if (n==9) {
-		cout << "1 5 2 3 8 7 6 9 4\n";
-	}
-	else if (n==10) {
-		cout << "1 2 4 3 6 5 10 9 8 7\n";
-	}
+	cout << "Total combinations is " << combs << ".\n";
+	cout << "Minimum number of tickets to print is " << tickets << ".\n";
 }
  
 int main() {

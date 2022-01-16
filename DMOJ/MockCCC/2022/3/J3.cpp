@@ -58,65 +58,69 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
+ 
 void solve() {
-	int n; cin >> n;
-	/*
-	unordered_map<int, bool> nums;
-	FOR (i, 1, n+1) nums[i] = true;
-	vi primes;
-	int arr[n+1] = {0};
-   for (int i = 2; i <= n; i++) {
-      for (int j = i * i; j <= n; j+=i) {
-         arr[j - 1] = 1;
-      }
-   }
-   for (int i = 1; i <= n; i++) {
-      if (arr[i - 1] == 0)
-		  primes.pb(i);
-   }
+	int n, m; cin >> n >> m;
+	string s, t; cin >> s >> t;
+	// make 2 frequency maps
+	unordered_map<char, int> f1, f2;
+	trav (i, s) f1[i]++;
+	trav (i, t) f2[i]++;
 
-	// greedy??
-	FOR (i, 1, n+1) {
-		trav (p, primes) {
-			if (nums[p-i]) {
-				nums[p-i] = false;
-				cout << p-i;
-				if (i!=n) cout << ' ';
-			}
+	pair<char, int> ma1 = {' ', 0};
+	pair<char, int> mi1 = {' ', 1e9};
+	trav (i, f1) {
+		int add = (i.sec+1)*(f2[i.fir]);
+		int sub = (i.sec-1)*(f2[i.fir]);
+		if (add > ma1.sec) {
+			ma1.fir = i.fir;
+			ma1.sec = add;
+		}
+		if (sub < mi1.sec && sub>=0) {
+			mi1.fir = i.fir;
+			mi1.sec = sub;
 		}
 	}
-	*/
-	if (n==1) {
-		cout << "1\n";
+
+	pair<char, int> ma2 = {' ', 0};
+	pair<char, int> mi2 = {' ', 1e9};
+	trav (i, f2) {
+		int add = (i.sec+1)*(f1[i.fir]);
+		int sub = (i.sec-1)*(f1[i.fir]);
+		if (add > ma2.sec) {
+			ma2.fir = i.fir;
+			ma2.sec = add;
+		}
+		if (sub < mi2.sec && sub>=0) {
+			mi2.fir = i.fir;
+			mi2.sec = sub;
+		}
 	}
-	else if (n==2) {
-		cout << "2 1\n";
+
+	cout << ma1.fir << ' ' << mi1.fir ;
+	cout << nl;
+	cout << ma2.fir << ' ' << mi2.fir ;
+	cout << nl;
+
+	cout << ma1.sec << ' ' << mi1.sec ;
+	cout << nl;
+	cout << ma2.sec << ' ' << mi2.sec ;
+
+	return;
+
+	if (ma1.sec-mi2.sec > ma2.sec-mi1.sec) {
+		f1[ma1.fir]++;
+		f2[mi2.fir]--;
 	}
-	else if (n==3) {
-		cout << "1 3 2\n";
+	else {
+		f2[mi2.fir]--;
+		f1[ma2.fir]++;
 	}
-	else if (n==4) {
-		cout << "1 2 4 3\n";
+	int ans=0;
+	trav (i, f1) {
+		ans += i.sec*f2[i.fir];
 	}
-	else if (n==5) {
-		cout << "1 5 4 3 2\n";
-	}
-	else if (n==6) {
-		cout << "1 2 4 3 6 5\n";
-	}
-	else if (n==7) {
-		cout << "1 3 2 7 6 5 4\n";
-	}
-	else if (n==8) {
-		cout << "1 2 4 3 8 7 6 5\n";
-	}
-	else if (n==9) {
-		cout << "1 5 2 3 8 7 6 9 4\n";
-	}
-	else if (n==10) {
-		cout << "1 2 4 3 6 5 10 9 8 7\n";
-	}
+	cout << ans << nl;
 }
  
 int main() {

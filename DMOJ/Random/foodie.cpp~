@@ -58,65 +58,25 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
+ 
 void solve() {
-	int n; cin >> n;
-	/*
-	unordered_map<int, bool> nums;
-	FOR (i, 1, n+1) nums[i] = true;
-	vi primes;
-	int arr[n+1] = {0};
-   for (int i = 2; i <= n; i++) {
-      for (int j = i * i; j <= n; j+=i) {
-         arr[j - 1] = 1;
-      }
-   }
-   for (int i = 1; i <= n; i++) {
-      if (arr[i - 1] == 0)
-		  primes.pb(i);
-   }
-
-	// greedy??
-	FOR (i, 1, n+1) {
-		trav (p, primes) {
-			if (nums[p-i]) {
-				nums[p-i] = false;
-				cout << p-i;
-				if (i!=n) cout << ' ';
+	int c, n; cin >> c >> n; c--;
+	vi a(n); FOR (i, 0, n) cin >> a[i];
+	vector<vi> dp(n+1, vi(c+1));
+	FOR (i, 0, n+1) {
+		FOR (j, 0, c+1) {
+			if (i==0 || j==0) {
+				dp[i][j] = 0;
+			}
+			else if (a[i-1] <= j) {
+				dp[i][j] = max(dp[i-1][j], a[i-1]+dp[i-1][j-a[i-1]]);
+			}
+			else {
+				dp[i][j] = dp[i-1][j];
 			}
 		}
 	}
-	*/
-	if (n==1) {
-		cout << "1\n";
-	}
-	else if (n==2) {
-		cout << "2 1\n";
-	}
-	else if (n==3) {
-		cout << "1 3 2\n";
-	}
-	else if (n==4) {
-		cout << "1 2 4 3\n";
-	}
-	else if (n==5) {
-		cout << "1 5 4 3 2\n";
-	}
-	else if (n==6) {
-		cout << "1 2 4 3 6 5\n";
-	}
-	else if (n==7) {
-		cout << "1 3 2 7 6 5 4\n";
-	}
-	else if (n==8) {
-		cout << "1 2 4 3 8 7 6 5\n";
-	}
-	else if (n==9) {
-		cout << "1 5 2 3 8 7 6 9 4\n";
-	}
-	else if (n==10) {
-		cout << "1 2 4 3 6 5 10 9 8 7\n";
-	}
+	cout << dp[n][c];
 }
  
 int main() {
