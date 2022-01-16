@@ -65,13 +65,11 @@ void sieve(int n) {
 	vector<bool> is_prime(n+1, true);
 	is_prime[0] = is_prime[1] = false;
 	for (int i = 2; i <= n; i++) {
-		if (is_prime[i] && (long long)i * i <= n) {
-			for (int j = i * i; j <= n; j += i)
+		if (is_prime[i] && (i+i <= n)) {
+			primes.pb(i);
+			for (int j = i+i; j <= n; j += i)
 				is_prime[j] = false;
 		}
-	}
-	FOR (i, 0, n) {
-		if (is_prime[i]) primes.pb(i);
 	}
 }
 
@@ -107,7 +105,7 @@ void solve() {
 		bool works=false;
 		trav (prime, primes) {
 			if (prime==1) continue;
-			if (prime > i) break;
+			if (prime >= i) break;
 			if (a[i-prime] == false) {
 				a[i] = 1;
 				works = true;
@@ -149,8 +147,8 @@ int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
  
-	sieve(MX);
-    int T = 1;
+	sieve(200010);
+    int T;
 	cin >> T;
     while(T--) {
         solve();
