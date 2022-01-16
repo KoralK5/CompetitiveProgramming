@@ -60,55 +60,10 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
-	// observation: go backwards
-	// saves (n*m + multiple visits) time
-	int r, c; cin >> r >> c;
-	vs a(r); FOR (i, 0, r) cin >> a[i];
-	int m; cin >> m;
-	vc moves(m); for (int i=m-1; i>=0; i--) cin >> moves[i];
-
-	FOR (i, 0, r) {
-		FOR (j, 0, c) {
-			if (a[i][j]=='.') {
-				vc dirs = {'u', 'd', 'l', 'r'};
-				bool works;
-				trav (dir, dirs) {
-					works = true;
-					int x=i, y=j;
-					trav (mo, moves) {
-						if (mo=='F') {
-							if (dir=='d') x--;
-							if (dir=='u') x++;
-							if (dir=='r') y--;
-							if (dir=='l') y++;
-						}
-						else if (mo=='R') {
-							if (dir=='u') dir='l';
-							else if (dir=='l') dir='d';
-							else if (dir=='d') dir='r';
-							else if (dir=='r') dir='u';
-						}
-						else if (mo=='L') {
-							if (dir=='u') dir='r';
-							else if (dir=='r') dir='d';
-							else if (dir=='d') dir='l';
-							else if (dir=='l') dir='u';
-						}
-						if (x<0 || y<0 || x>=r || y>=c || a[x][y]!='.') {
-							works = false;
-							break;
-						}
-					}
-					if (works) break;
-				}
-				if (works) cout << '*';
-				else cout << a[i][j];
-			}
-			else {
-				cout << a[i][j];
-			}
-		}
-		cout << nl;
+	int m, q; cin >> m >> q;
+	vector<pair<string, int>> people(q);
+	FOR (i, 0, q) {
+		cin >> people[i].fir >> people[i].sec;
 	}
 }
  

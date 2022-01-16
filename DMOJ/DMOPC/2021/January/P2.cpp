@@ -64,7 +64,10 @@ void solve() {
 	// even + even = even
 	// even + odd = odd
 	// odd + odd = even
-	if (n == 1) {
+	// what if flip at the end??
+	// happens iff n%6=0 (still works somehow)
+	// so n=2 is the only -1p
+	if (n==1) {
 		cout << 1 << nl;
 		return;
 	}
@@ -72,8 +75,6 @@ void solve() {
 		cout << -1 << nl;
 		return;
 	}
-	// what if flip at the end??
-	// happens iff n%6=0 
 	bool flip=true;
 	cout << 1 << ' ';
 	for (int i=2; i<=n; i+=2) {

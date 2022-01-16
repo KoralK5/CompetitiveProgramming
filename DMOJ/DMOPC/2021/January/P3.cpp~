@@ -58,55 +58,88 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
-void solve() {
-	// observation: go backwards
-	// saves (n*m + multiple visits) time
-	int r, c; cin >> r >> c;
-	vs a(r); FOR (i, 0, r) cin >> a[i];
-	int m; cin >> m;
-	vc moves(m); for (int i=m-1; i>=0; i--) cin >> moves[i];
 
-	FOR (i, 0, r) {
-		FOR (j, 0, c) {
-			if (a[i][j]=='.') {
-				vc dirs = {'u', 'd', 'l', 'r'};
-				bool works;
-				trav (dir, dirs) {
-					works = true;
-					int x=i, y=j;
-					trav (mo, moves) {
-						if (mo=='F') {
-							if (dir=='d') x--;
-							if (dir=='u') x++;
-							if (dir=='r') y--;
-							if (dir=='l') y++;
-						}
-						else if (mo=='R') {
-							if (dir=='u') dir='l';
-							else if (dir=='l') dir='d';
-							else if (dir=='d') dir='r';
-							else if (dir=='r') dir='u';
-						}
-						else if (mo=='L') {
-							if (dir=='u') dir='r';
-							else if (dir=='r') dir='d';
-							else if (dir=='d') dir='l';
-							else if (dir=='l') dir='u';
-						}
-						if (x<0 || y<0 || x>=r || y>=c || a[x][y]!='.') {
-							works = false;
-							break;
-						}
-					}
-					if (works) break;
-				}
-				if (works) cout << '*';
-				else cout << a[i][j];
+// sieve
+vi primes;
+void sieve(int n) {
+	vector<bool> is_prime(n+1, true);
+	is_prime[0] = is_prime[1] = false;
+	for (int i = 2; i <= n; i++) {
+		if (is_prime[i] && (long long)i * i <= n) {
+			for (int j = i * i; j <= n; j += i)
+				is_prime[j] = false;
+		}
+	}
+	FOR (i, 0, n) {
+		if (is_prime[i]) primes.pb(i);
+	}
+}
+
+void solve() {
+	int n; cin >> n;
+	// almost all cases can be solved with the order 1, 2, 3, 4, ..., n
+	// it will only fail iff all the prime distances p[i] can jump to work for the opponent
+	// so we must screw over the opponent by moving p[i] to the previous number that does not work
+
+	// 1 or 2 can't go any lower
+	if (n <= 2) {
+		cout << -1 << nl;
+		return;
+	}
+
+	// up to 10 works
+	if (n < 10) {
+		FOR (i, 1, n+1) {
+			cout << i;
+			if (i!=n) cout << ' ';
+		}
+		cout << nl;
+		return;
+	}
+
+	// now figure out which numbers can't reach non-working numbers
+	// if n can reach a non-working number, then it can be ordered 1, 2, 3, ..., n
+	// check the reach via prime distances, otherwise n is non-working
+	vector<int> a(n+1);
+	FOR (i, 0, 3) a[i] = false;
+	FOR (i, 3, 10) a[i] = true;
+	FOR (i, 10, n+1) {
+		bool works=false;
+		trav (prime, primes) {
+			if (prime==1) continue;
+			if (prime > i) break;
+			if (a[i-prime] == false) {
+				a[i] = 1;
+				works = true;
+				break;
 			}
-			else {
-				cout << a[i][j];
+		}
+		if (!works) a[i] = 0;
+	}
+
+	if (a[n]) {
+		FOR (i, 1, n+1) {
+			cout << i;
+			if (i!=n) cout << ' ';
+		}
+		cout << nl;
+		return;
+	}
+	else {
+		// find second last working point and replace that with n
+		int rep=0;
+		for (int i=n; i>0; i--) {
+			if (a[i]) {
+				rep = i;
+				break;
 			}
+		}
+		FOR (i, 1, n) {
+			if (i == rep) {
+				cout << n << ' ';
+			}
+			cout << i;
+			if (i!=n-1) cout << ' ';
 		}
 		cout << nl;
 	}
@@ -116,8 +149,9 @@ int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
  
+	sieve(MX);
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }

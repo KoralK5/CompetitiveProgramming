@@ -59,34 +59,26 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
+vi primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47};
+
+bool works(vi a) {
+	FOR (i, 0, sz(a)) {
+		int num = i+5 + a[i];
+		if (find(all(primes), num) == primes.end()) return false;
+	}
+	return true;
+}
+
+bool sm(vi a, vi b) {
+	FOR (i, 0, sz(a)) {
+		if (a[i] < b[i]) return true;
+		if (b[i] < a[i]) return false;
+	}
+	return false;
+}
+
 void solve() {
 	int n; cin >> n;
-	/*
-	unordered_map<int, bool> nums;
-	FOR (i, 1, n+1) nums[i] = true;
-	vi primes;
-	int arr[n+1] = {0};
-   for (int i = 2; i <= n; i++) {
-      for (int j = i * i; j <= n; j+=i) {
-         arr[j - 1] = 1;
-      }
-   }
-   for (int i = 1; i <= n; i++) {
-      if (arr[i - 1] == 0)
-		  primes.pb(i);
-   }
-
-	// greedy??
-	FOR (i, 1, n+1) {
-		trav (p, primes) {
-			if (nums[p-i]) {
-				nums[p-i] = false;
-				cout << p-i;
-				if (i!=n) cout << ' ';
-			}
-		}
-	}
-	*/
 	if (n==1) {
 		cout << "1\n";
 	}
@@ -115,12 +107,46 @@ void solve() {
 		cout << "1 5 2 3 8 7 6 9 4\n";
 	}
 	else if (n==10) {
-		cout << "1 2 4 3 6 5 10 9 8 7\n";
+		// cout << "1 2 4 3 6 5 10 9 8 7\n";
+		// just brute force the remaining 6
+		// cout << "1 2 4 3 6 5 10 9 8 7\n";
+		// return;
+		cout << "1 2 4 3 ";
+		vi rem(6);
+		vi best = {10, 9, 8, 7, 6, 5};
+		FOR (a, 0, 6) {
+			FOR (b, 0, 6) {
+				if (b==a) continue;
+				FOR (c, 0, 6) {
+					if (c==b||c==a) continue;
+					FOR (d, 0, 6) {
+						if (d==c||d==b||d==a) continue;
+						FOR (e, 0, 6) {
+							if (e==d||e==c||e==b||e==a) continue;
+							FOR (f, 0, 6) {
+								if (f==e||f==d||f==c||f==b||f==a) continue;
+								rem[a]=5;
+								rem[b]=6;
+								rem[c]=7;
+								rem[d]=8;
+								rem[e]=9;
+								rem[f]=10;
+								if (works(rem) && sm(rem, best)) {
+									best=rem;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		trav (i, best) cout << i << ' ';
+		cout << nl;
 	}
 }
  
 int main() {
-    cin.tie(0)->sync_with_stdio(0); 
+    // cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
  
     int T = 1;
