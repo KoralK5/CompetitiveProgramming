@@ -69,7 +69,7 @@ void solve() {
 	for (int i=n; i>0; i--) {
 		bool works = false;
 		FOR (j, 0, sz(p)) {
-			if (p[j]%i == 0) {
+			if (p[j]%i != 0) {
 				works = true;
 			}
 		}
