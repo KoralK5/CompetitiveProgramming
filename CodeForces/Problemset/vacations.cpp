@@ -59,84 +59,48 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-struct segTree {
-	int size;
-	vector<long long> tree;
-
-	void init(int n) {
-		size = 1;
-		while (size < n) size*=2;
-		tree.assign(2*size, 0LL);
-	}
-	
-	// has to be associative (a*b)*c == (a*c)*b
-	long long func(long long x, long long y) {
-		return max(x, y);
-	}
-
-	void build(vector<int> &a, int x, int lx, int rx) {
-		if (rx - lx == 1) {
-			if (lx < (int)a.size()) {
-				tree[x] = a[lx];
-			}
-			return;
-		}
-		int mid = (lx + rx)/2;
-		build(a, 2*x+1, lx, mid);
-		build(a, 2*x+2, mid, rx);
-		tree[x] = func(tree[2*x+1], tree[2*x+2]);
-	}
-
-	void build(vector<int> &a) {
-		build(a, 0, 0, size);
-	}
-
-	void set(int i, int v, int x, int lx, int rx) {
-		if (rx - lx == 1) {
-			tree[x] = v;
-			return;
-		}
-		int mid = (lx + rx)/2;
-		if (i < mid) {
-			set(i, v, 2*x+1, lx, mid);
-		}
-		else {
-			set(i, v, 2*x+2, mid, rx);
-		}
-		tree[x] = func(tree[2*x+1], tree[2*x+2]);
-	}
-
-	// i:index, v:value
-	void set(int i, int v) {
-		set(i, v, 0, 0, size);
-	}
-
-	long long calc(int l, int r, int x, int lx, int rx) {
-		if (lx >= r || l >= rx) return 0; // IF CALC MIN, USE INT_MAX
-		if (lx >= l && rx <= r) return tree[x];
-		int mid = (lx + rx)/2;
-		long long lChild = calc(l, r, 2*x+1, lx, mid);
-		long long rChild = calc(l, r, 2*x+2, mid, rx);
-		return func(lChild, rChild);
-	}
-
-	// calc within range
-	long long calc(int l, int r) {
-		return calc(l, r, 0, 0, size);
-	}
-};
+int min(vi a) {
+	int ans=1e9;
+	trav (i, a) ans=min(ans, i);
+	return ans;
+}
  
 void solve() {
-	// brute force is 20! = 2e18
-	int m, q; cin >> m >> q;
-	vs people(q);
-	vi times(q);
-	FOR (i, 0, q) cin >> people[i] >> times[i];
-
-	// seg tree the max of groups
-	segTree st;
-	st.init(q);
-	st.build(times);
+	int n; cin >> n;
+	vi a(n); FOR (i, 0, n) cin >> a[i];
+	/* 0: neither
+	 * 1: contest
+	 * 2: gym
+	 * 3: both
+	*/
+	// rest, contest, gym
+	vector<vi> dp(n, vi(3));
+	dp[0][0] = 1;
+	dp[0][1] = 1e9*(a[0]==0 || a[0]==2);
+	dp[0][2] = 1e9*(a[0]==0 || a[0]==1);
+	FOR (i, 1, n) {
+		if (a[i] == 0) {
+			dp[i][0] = min(dp[i-1])+1;
+			dp[i][1] = 1e9;
+			dp[i][2] = 1e9;
+		}
+		else if (a[i] == 1) {
+			dp[i][0] = min(dp[i-1])+1;
+			dp[i][1] = min(dp[i-1][0], dp[i-1][2]);
+			dp[i][2] = 1e9;
+		}
+		else if (a[i] == 2) {
+			dp[i][0] = min(dp[i-1])+1;
+			dp[i][1] = 1e9;
+			dp[i][2] = min(dp[i-1][0], dp[i-1][1]);
+		}
+		else {
+			dp[i][0] = min(dp[i-1])+1;
+			dp[i][1] = min(dp[i-1][0], dp[i-1][2]);
+			dp[i][2] = min(dp[i-1][0], dp[i-1][1]);
+		}
+	}
+	cout << min(dp[n-1]);
 }
  
 int main() {

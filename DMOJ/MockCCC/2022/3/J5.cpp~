@@ -58,85 +58,51 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-struct segTree {
-	int size;
-	vector<long long> tree;
-
-	void init(int n) {
-		size = 1;
-		while (size < n) size*=2;
-		tree.assign(2*size, 0LL);
-	}
-	
-	// has to be associative (a*b)*c == (a*c)*b
-	long long func(long long x, long long y) {
-		return max(x, y);
-	}
-
-	void build(vector<int> &a, int x, int lx, int rx) {
-		if (rx - lx == 1) {
-			if (lx < (int)a.size()) {
-				tree[x] = a[lx];
-			}
-			return;
-		}
-		int mid = (lx + rx)/2;
-		build(a, 2*x+1, lx, mid);
-		build(a, 2*x+2, mid, rx);
-		tree[x] = func(tree[2*x+1], tree[2*x+2]);
-	}
-
-	void build(vector<int> &a) {
-		build(a, 0, 0, size);
-	}
-
-	void set(int i, int v, int x, int lx, int rx) {
-		if (rx - lx == 1) {
-			tree[x] = v;
-			return;
-		}
-		int mid = (lx + rx)/2;
-		if (i < mid) {
-			set(i, v, 2*x+1, lx, mid);
-		}
-		else {
-			set(i, v, 2*x+2, mid, rx);
-		}
-		tree[x] = func(tree[2*x+1], tree[2*x+2]);
-	}
-
-	// i:index, v:value
-	void set(int i, int v) {
-		set(i, v, 0, 0, size);
-	}
-
-	long long calc(int l, int r, int x, int lx, int rx) {
-		if (lx >= r || l >= rx) return 0; // IF CALC MIN, USE INT_MAX
-		if (lx >= l && rx <= r) return tree[x];
-		int mid = (lx + rx)/2;
-		long long lChild = calc(l, r, 2*x+1, lx, mid);
-		long long rChild = calc(l, r, 2*x+2, mid, rx);
-		return func(lChild, rChild);
-	}
-
-	// calc within range
-	long long calc(int l, int r) {
-		return calc(l, r, 0, 0, size);
-	}
-};
  
 void solve() {
-	// brute force is 20! = 2e18
-	int m, q; cin >> m >> q;
-	vs people(q);
-	vi times(q);
-	FOR (i, 0, q) cin >> people[i] >> times[i];
+	int n, m; cin >> n >> m;
+	vector<pi> res;
+	int a, b;
+	FOR (i, 0, m) {
+		cin >> a >> b;
+		res.pb({a, b});
+	}
 
-	// seg tree the max of groups
-	segTree st;
-	st.init(q);
-	st.build(times);
+	int removed=0;
+	unordered_map<int, int> freqs;
+	while (sz(res)) {
+		int mxSize=1, mx=-1;
+		// calc most frequent
+		freqs.clear();
+		trav (i, res) {
+			freqs[i.fir]++;
+			freqs[i.sec]++;
+
+			if (i.fir == i.sec) {
+				mx = i.fir;
+				break;
+			}
+			if (freqs[i.fir] > mxSize) {
+				mxSize = freqs[i.fir];
+				mx = i.fir;
+			}
+			if (freqs[i.sec] > mxSize) {
+				mxSize = freqs[i.sec];
+				mx = i.sec;
+			}
+		}
+		if (mx == -1) {
+			break;
+		}
+		removed++;
+		FOR (i, 0, sz(res)) {
+			if (res[i].fir==mx || res[i].sec==mx) {
+				res.erase(res.begin()+i);
+				i--;
+			}
+		}
+	}
+	cout << n-removed << nl;
 }
  
 int main() {
