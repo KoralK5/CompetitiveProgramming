@@ -2,6 +2,7 @@
 ID: Koral Kulacoglu
 TASK: test
 LANG: C++                 
+(sorry bill XD)
 */
 
 #pragma GCC optimize ("O3")
@@ -57,89 +58,69 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 const int MOD = 1000000007;
 const char nl = '\n';
-const int MX = 100001; 
+const int MX = 2e5+5; 
 
-int n, k;
-vi skills;
-vi nums(2e5, 0);
-unordered_map<int, vector<pi>> bp;
+vector<pi> bp[MX]; // difficulty : v
 
-// find the range of numbers that will work for each node using dfs and increment a range at the same time
-void dfs(int node, int mn, int mx) {
-	if (mn > mx) return;
+int ans[MX], s[MX], n, k;
 
-	trav (i, skills) {
-		if (mn <= i && i <= mx)
-			nums[node-1]++;
-	}
+void dfs(int u, int l, int r){
+    if(r > k) return;
 
-	int size = sz(bp[node]);
+    ans[u] = r-l+1;
+	int size = sz(bp[u]);
 
-	if (size==0 || node==n) return;
+    if(size == 1){
+        dfs(bp[u][0].sec, l, r);
+    }
 
-	if (size == 1) {
-		dfs(bp[node][0].fir, mn, mx);
-		return;
-	}
+	else if(size == 2) {
+        int split = (bp[u][0].fir + bp[u][1].fir)/2;
+        int upidx = upper_bound(s+l, s+r+1, split)-s;
+        dfs(bp[u][0].sec, l, upidx-1);
+        dfs(bp[u][1].sec, upidx, r);
+    }
 
-	// for each number, check left and right side to find min and max, then dfs with that
-	FOR (i, 0, size) {
-		if (node >= bp[node][i].fir) continue;
-		if (i==0) {
-			dfs(bp[node][i].fir, mn, min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2));
-		}
-		else if (i == size-1) {
-			dfs(bp[node][i].fir, max(mn, (bp[node][i].sec+bp[node][i-1].sec+2)/2), mx);
-		}
-		else {
-			dfs(bp[node][i].fir, max(mn, (bp[node][i].sec+bp[node][i-1].sec+2)/2), min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2));
-		}
-	}
+	else if(size >= 3){
+        bp[u].pb({INT_MAX, -1});
+        for (int i = 0; i+1 < size; i++) {
+            int splithigh = ((ll)bp[u][i].fir + (ll)bp[u][i+1].fir)/2;
+            int splitlow, left, right;
+            if (i == 0) {
+				splitlow = 0;
+				left = l;
+			}
+            else {
+                splitlow = (bp[u][i-1].fir + bp[u][i].fir)/2;
+                left = upper_bound(s+l, s+r+1, splitlow)-s;
+            }
+            right = upper_bound(s+l, s+r+1, splithigh)-s;
+            dfs(bp[u][i].sec, left, right-1);
+        }
+    }
 }
 
-bool compare(pi a, pi b) {
-	return a.sec < b.sec;
-}
+int main() {
+    cin.sync_with_stdio(0); cin.tie(0);
 
-void solve() {
-	// directed graph
-	cin >> n >> k;
-	// a <b, d>
-	int a, b, d;
-	FOR (i, 0, n-1) {
-		cin >> a >> b >> d;
-		bp[a].pb({b, d});
-	}
+    cin >> n >> k;
+    for(int i = 1, a, b, d; i < n; i++){
+        cin >> a >> b >> d;
+        bp[a].pb({d, b});
+    }
 
-	// pre-sort the map 
-	trav (i, bp) sort(all(i.sec), compare);
+    for(int i = 1; i <= k; i++) cin >> s[i];
+    sort(s+1, s+k+1);
 
-	int s;
-	FOR (i, 0, k) {
-		cin >> s;
-		skills.pb(s);
-	}
+    for(int i = 1; i <= n; i++) sort(all(bp[i]));
 
-	// node min  max
-	dfs(1, -1e9, 1e9);
+    dfs(1, 1, k);
 
-	FOR (i, 0, n) {
-		cout << nums[i];
-		if (i != n) cout << ' ';
+	FOR (i, 1, n+1) {
+		cout << ans[i];
+		if (i!=n) cout << ' ';
 	}
 	cout << nl;
-}
- 
-int main() {
-    cin.tie(0)->sync_with_stdio(0); 
-    cin.exceptions(cin.failbit);
- 
-    int T = 1;
-//    cin >> T;
-    while(T--) {
-        solve();
-    }
- 
-	return 0;
-}
 
+    return 0;
+}

@@ -59,73 +59,45 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-int n, k;
-vi skills;
-vi nums(2e5, 0);
-unordered_map<int, vector<pi>> bp;
-
-// find the range of numbers that will work for each node using dfs and increment a range at the same time
-void dfs(int node, int mn, int mx) {
-	if (mn > mx) return;
-
-	trav (i, skills) {
-		if (mn <= i && i <= mx)
-			nums[node-1]++;
-	}
-
-	int size = sz(bp[node]);
-
-	if (size==0 || node==n) return;
-
-	if (size == 1) {
-		dfs(bp[node][0].fir, mn, mx);
-		return;
-	}
-
-	// for each number, check left and right side to find min and max, then dfs with that
-	FOR (i, 0, size) {
-		if (node >= bp[node][i].fir) continue;
-		if (i==0) {
-			dfs(bp[node][i].fir, mn, min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2));
+int n, s;
+map<int, vi> group;
+unordered_map<int, int> points;
+bool compare(int a, int b) {
+	if (points[a] > points[b]) return true;
+	else if (points[b] > points[a]) return false;
+	else return a < b;
+}
+ 
+void solve() {
+	cin >> n >> s;
+	int cur;
+	FOR (i, 0, n/s) {
+		FOR (j, 0, s) {
+			cin >> cur;
+			group[i].pb(cur);
 		}
-		else if (i == size-1) {
-			dfs(bp[node][i].fir, max(mn, (bp[node][i].sec+bp[node][i-1].sec+2)/2), mx);
+	}
+	int a, b;
+	char r;
+	FOR (i, 0, (s-1)*n/2) {
+		cin >> a >> b >> r;
+		if (r == 'W') {
+			points[a] += 3;
+		}
+		else if (r == 'L') {
+			points[b] += 3;
 		}
 		else {
-			dfs(bp[node][i].fir, max(mn, (bp[node][i].sec+bp[node][i-1].sec+2)/2), min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2));
+			points[a]++;
+			points[b]++;
 		}
 	}
-}
-
-bool compare(pi a, pi b) {
-	return a.sec < b.sec;
-}
-
-void solve() {
-	// directed graph
-	cin >> n >> k;
-	// a <b, d>
-	int a, b, d;
-	FOR (i, 0, n-1) {
-		cin >> a >> b >> d;
-		bp[a].pb({b, d});
-	}
-
-	// pre-sort the map 
-	trav (i, bp) sort(all(i.sec), compare);
-
-	int s;
-	FOR (i, 0, k) {
-		cin >> s;
-		skills.pb(s);
-	}
-
-	// node min  max
-	dfs(1, -1e9, 1e9);
-
-	FOR (i, 0, n) {
-		cout << nums[i];
-		if (i != n) cout << ' ';
+	int k; cin >> k;
+	trav (i, group) {
+		// sort using a function
+		sort(all(i.sec), compare);
+		cout << i.sec[k-1];
+		if (i.fir < n/s-1) cout << ' ';
 	}
 	cout << nl;
 }

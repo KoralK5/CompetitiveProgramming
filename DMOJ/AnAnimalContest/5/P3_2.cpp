@@ -66,68 +66,64 @@ unordered_map<int, vector<pi>> bp;
 
 // find the range of numbers that will work for each node using dfs and increment a range at the same time
 void dfs(int node, int mn, int mx) {
-	if (mn > mx) return;
+    if (mn > mx) return;
 
-	trav (i, skills) {
-		if (mn <= i && i <= mx)
-			nums[node-1]++;
-	}
+    // maybe binary search
+    trav (i, skills) {
+        if (mn <= i && i <= mx)
+            nums[node-1]++;
+    }
 
-	int size = sz(bp[node]);
+    int size = sz(bp[node]);
 
-	if (size==0 || node==n) return;
+    if (size==0 || node==n) return;
 
-	if (size == 1) {
-		dfs(bp[node][0].fir, mn, mx);
-		return;
-	}
+    if (size == 1) {
+        dfs(bp[node][0].fir, mn, mx);
+        return;
+    }
 
-	// for each number, check left and right side to find min and max, then dfs with that
-	FOR (i, 0, size) {
-		if (node >= bp[node][i].fir) continue;
-		if (i==0) {
-			dfs(bp[node][i].fir, mn, min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2));
-		}
-		else if (i == size-1) {
-			dfs(bp[node][i].fir, max(mn, (bp[node][i].sec+bp[node][i-1].sec+2)/2), mx);
-		}
-		else {
-			dfs(bp[node][i].fir, max(mn, (bp[node][i].sec+bp[node][i-1].sec+2)/2), min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2));
-		}
-	}
+    // for each number, check left and right side to find min and max, then dfs with that
+    FOR (i, 0, size) {
+        if (node >= bp[node][i].fir) continue;
+		int up = min(mx, (bp[node][i].sec+bp[node][i+1].sec)/2);
+		int down = max(mn, (bp[node][i].sec+bp[node][i-1].sec+1)/2);
+		int range = min(abs(bp[node][i].sec-down), abs(bp[node][i].sec-up));
+		dfs(bp[node][i].fir, bp[node][i].sec-range, bp[node][i].sec+range);
+    }
 }
 
 bool compare(pi a, pi b) {
-	return a.sec < b.sec;
+    return a.sec < b.sec;
 }
 
 void solve() {
-	// directed graph
-	cin >> n >> k;
-	// a <b, d>
-	int a, b, d;
-	FOR (i, 0, n-1) {
-		cin >> a >> b >> d;
-		bp[a].pb({b, d});
-	}
+    // directed graph
+    cin >> n >> k;
+    // a <b, d>
+    int a, b, d;
+    FOR (i, 0, n-1) {
+        cin >> a >> b >> d;
+        bp[a].pb({b, d});
+    }
 
-	// pre-sort the map 
-	trav (i, bp) sort(all(i.sec), compare);
+    // pre-sort the map 
+    trav (i, bp) sort(all(i.sec), compare);
 
-	int s;
-	FOR (i, 0, k) {
-		cin >> s;
-		skills.pb(s);
-	}
+    int s;
+    FOR (i, 0, k) {
+        cin >> s;
+        skills.pb(s);
+    }
 
-	// node min  max
-	dfs(1, -1e9, 1e9);
+    // node min  max
+    dfs(1, -1e9, 1e9);
 
-	FOR (i, 0, n) {
-		cout << nums[i];
-		if (i != n) cout << ' ';
-	}
-	cout << nl;
+    FOR (i, 0, n) {
+        cout << nums[i];
+        if (i != n-1) cout << ' ';
+    }
+    cout << nl;
 }
  
 int main() {
@@ -140,6 +136,5 @@ int main() {
         solve();
     }
  
-	return 0;
+    return 0;
 }
-
