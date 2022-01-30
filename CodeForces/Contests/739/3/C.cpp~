@@ -85,10 +85,44 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
+
+/*
+ * oeoe
+ * eoeo
+ * oeoe
+*/
+
+/*
+ * 1,1: 1
+ * 1,2: 2
+ * 2,2: 3
+ * 2,1: 4
+ * 3,1: 5
+ * 3,2: 6
+ * 3,3: 7
+ * 2,3: 8
+ * 1,3: 9
+ * 4,1: 10
+*/
+// rows decrease, columns increase??
+
 void solve() {
- 
- 
+	int k; cin >> k;
+	double sq = sqrt(k);
+	// find next largest perfect square
+    if (ceil(sq) == floor(sq)) {
+		cout << sq << ' ' << 1 << nl;
+	}
+	else {
+		int nK = sq+1;
+		int nPs = pow(nK, 2);
+		if (nPs-k < nK) {
+			cout << nK << ' ' << nPs-k+1 << nl;
+		}
+		else {
+			cout << nK-(nPs-nK+1)+k << ' ' << nK << nl;
+		}
+	}
 }
  
 int main() {
@@ -96,10 +130,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

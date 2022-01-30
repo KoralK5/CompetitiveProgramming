@@ -85,21 +85,30 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+vi liked;
+void preComp(int n) {
+	FOR (i, 1, n+1) {
+		if (i%3!=0 && i%10!=3) liked.pb(i);
+	}
+}
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	cout << liked[n-1] << nl;
 }
  
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
  
+	preComp(1e5);
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

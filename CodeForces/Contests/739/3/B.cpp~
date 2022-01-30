@@ -87,8 +87,13 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int a, b, c; cin >> a >> b >> c;
+	int size = max(a,b) - min(a,b);
+	if (max(c,max(a,b)) > size*2) {
+		cout << -1 << nl;
+		return;
+	}
+	cout << ((c-size>0)?(c-size):(c+size)) << nl;
 }
  
 int main() {
@@ -96,10 +101,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

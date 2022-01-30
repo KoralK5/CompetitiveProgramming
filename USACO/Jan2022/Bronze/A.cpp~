@@ -32,27 +32,31 @@ typedef vector<cd> vcd;
 const char nl = '\n';
 
 void solve() {
-	// at each segment, bring the max down to the min
-	int n; cin >> n;
-	vi h(n);
-	int mn=1e9;
-	FOR (i, 0, n) {
-		cin >> h[i];
-		mn = min(mn, h[i]);
+	vs c(3), g(3);
+	FOR (i, 0, 3) cin >> c[i];
+	FOR (i, 0, 3) cin >> g[i];
+
+	int cor=0;
+	unordered_map<char, int> f1;
+	unordered_map<char, int> f2;
+	FOR (i, 0, 3) {
+		FOR (j, 0, 3) {
+			if (c[i][j] == g[i][j]) {
+				cor++;
+			}
+			else {
+				f1[c[i][j]]++;
+				f2[g[i][j]]++;
+			}
+		}
 	}
-	int ans=0;
-	FOR (i, 0, n-1) {
-		int d = min(h[i], h[i+1]);
-		mn = min(mn, d);
-		ans += mn;
-		h[i+1] -= mn;
+	int wrong=0;
+	trav (i, f1) {
+		if (f2[i.fir]) {
+			wrong += min(f2[i.fir], i.sec);
+		}
 	}
-	if (ans==0 || ans%2) {
-		cout << -1 << nl;
-	}
-	else {
-		cout << ans+4 << nl;
-	}
+	cout << cor << nl << wrong << nl;
 }
  
 int main() {
@@ -60,7 +64,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-	cin >> T;
+//    cin >> T;
     while(T--) {
         solve();
     }

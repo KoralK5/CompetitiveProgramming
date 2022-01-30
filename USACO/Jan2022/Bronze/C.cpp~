@@ -34,25 +34,71 @@ const char nl = '\n';
 void solve() {
 	// at each segment, bring the max down to the min
 	int n; cin >> n;
-	vi h(n);
+	vi a(n);
 	int mn=1e9;
+	bool same=true;
+	int num;
 	FOR (i, 0, n) {
-		cin >> h[i];
-		mn = min(mn, h[i]);
+		cin >> a[i];
+		mn = min(mn, a[i]);
+		if (i==0) {
+			num = a[i];
+		}
+		else if (a[i] != num) {
+			same=false;
+		}
+	}
+	if (n==1 || same) {
+		cout << 0 << nl;
+		return;
+	}
+	if (n==2) {
+		if (a[0] == a[1]) {
+			cout << 0 << nl;
+		}
+		else {
+			cout << -1 << nl;
+		}
+		return;
+	}
+	else if (n%3) {
+		cout << -1 << nl;
+		return;
 	}
 	int ans=0;
-	FOR (i, 0, n-1) {
-		int d = min(h[i], h[i+1]);
-		mn = min(mn, d);
-		ans += mn;
-		h[i+1] -= mn;
+	for (int i=1; i<n-1; i+=3) {
+		if (a[i]<a[i-1] || a[i]<a[i+1]) {
+			cout << -1 << nl;
+			return;
+		}
+		int small = min(a[i-1], a[i+1]);
+		int diff = a[i]-small;
+		ans += diff*2;
+
+		a[i] -= diff;
+		if (a[i-1] == small) a[i+1] -= diff;
+		else a[i-1] -= diff;
+
+		if (a[i]!=a[i-1] && a[i]!=a[i+1]) {
+			cout << -1 << nl;
+			return;
+		}
+
+		int sm = min(a[i-1], a[i+1]);
+		int lg = max(a[i-1], a[i+1]);
+
+		ans += (lg-sm)*2;
+		FOR (j, -1, 2) {
+			if (a[i+j] == lg) {
+				a[i+j] = sm;
+			}
+		}
+		if (!(a[i]==a[i-1] && a[i]==a[i+1]) || a[i]<0) {
+			cout << -1 << nl;
+			return;
+		}
 	}
-	if (ans==0 || ans%2) {
-		cout << -1 << nl;
-	}
-	else {
-		cout << ans+4 << nl;
-	}
+	cout << ans << nl;
 }
  
 int main() {

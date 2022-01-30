@@ -32,27 +32,9 @@ typedef vector<cd> vcd;
 const char nl = '\n';
 
 void solve() {
-	// at each segment, bring the max down to the min
-	int n; cin >> n;
-	vi h(n);
-	int mn=1e9;
-	FOR (i, 0, n) {
-		cin >> h[i];
-		mn = min(mn, h[i]);
-	}
-	int ans=0;
-	FOR (i, 0, n-1) {
-		int d = min(h[i], h[i+1]);
-		mn = min(mn, d);
-		ans += mn;
-		h[i+1] -= mn;
-	}
-	if (ans==0 || ans%2) {
-		cout << -1 << nl;
-	}
-	else {
-		cout << ans+4 << nl;
-	}
+	vi a(4), b(4);
+	FOR (i, 0, 4) cin >> a[i];
+	FOR (i, 0, 4) cin >> b[i];
 }
  
 int main() {

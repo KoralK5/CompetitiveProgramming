@@ -87,8 +87,10 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int a; cin >> a;
+	int ans=0;
+	FOR (i, 1, a+1) ans+=i;
+	cout << ans << nl;
 }
  
 int main() {
@@ -103,3 +105,4 @@ int main() {
  
 	return 0;
 }
+
