@@ -91,10 +91,20 @@ vector<vi> a;
 vi dx = {0, 0, -1, 1};
 vi dy = {-1, 1, 0, 0};
 
+struct hash_pair {
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2>& p) const
+    {
+        auto hash1 = hash<T1>{}(p.first);
+        auto hash2 = hash<T2>{}(p.second);
+        return hash1 ^ hash2;
+    }
+};
+
 int bfs(int x, int y) {
 	if (a[x][y] != 0) return a[x][y];
 
-	map<pi, bool> visited;
+	unordered_map<pi, bool, hash_pair> visited;
 	queue<vi> que;
 
 	int best=1e9, bestDist=k;
@@ -152,7 +162,7 @@ void solve() {
 	}
 
 	else {
-		map<pi, bool> visited;
+		unordered_map<pi, bool, hash_pair> visited;
 		while (!que.empty()) {
 			if (!rand()%5) break;
 			vi node = que.front();
