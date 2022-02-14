@@ -94,16 +94,17 @@ unordered_map<int, vi> h;
 // make C visited, then D visited
 unordered_map<int, bool> visited;
 bool dfs(int node) {
-	if (node == b)
-		return true;
+	if (node == b) return true;
 
 	if (!visited[node]) {
 		visited[node] = true;
 		trav (neigh, h[node]) {
-			if (dfs(neigh))
+			if (dfs(neigh)) {
 				return true;
+			}
 		}
 	}
+
 	return false;
 }
 
@@ -125,14 +126,16 @@ void solve() {
 		cout << -1 << nl;
 		return;
 	}
+
+	// whichever does not work
 	visited[c] = true;
-	if (!dfs(a)) {
-		cout << -1 << nl;
-		return;
-	}
+	bool cPath = dfs(a);
+
 	visited.clear();
 	visited[d] = true;
-	if (!dfs(a)) {
+	bool dPath = dfs(a);
+
+	if (!cPath && !dPath) {
 		cout << -1 << nl;
 		return;
 	}
@@ -140,18 +143,24 @@ void solve() {
 	// now we know it must work
 	// bfs from A to B (can use just 2 colors)
 	// reconstruct by keeping track of each parent node in the neighbor
-	cout << 2 << nl;
-
-	queue<int> que;
-	que.push(a);
+	queue<pair<int, bool>> que;
+	que.push({a, false});
 	unordered_map<int, int> recVis;
 	recVis[a] = true;
 	while (!que.empty()) {
-		int node = que.front(); que.pop();
-		trav (neigh, h[node]) {
+		pi node = que.front(); que.pop();
+		trav (neigh, h[node.fir]) {
 			if (recVis[neigh] == 0) {
-				recVis[neigh] = node;
-				que.push(neigh);
+				recVis[neigh] = node.fir;
+
+				if (neigh == c || neigh == d) {
+					if (node.sec == 0) {
+						que.push({neigh, 1});
+					}
+				}
+				else {
+					que.push({neigh, 0});
+				}
 			}
 			if (neigh == b) {
 				break;
@@ -166,18 +175,24 @@ void solve() {
 		node = recVis[node];
 	}
 
-	// color the path 1
 	vi order(m, 2);
+
+	// color the A-B path 1
 	while (!stk.empty()) {
 		pi node = stk.top(); stk.pop();
 		order[mVals[node]] = 1;
+		// cout << node.fir << ' ' << node.sec << nl;
 	}
 
-	// color C's neighbors 1
-	trav (i, h[c]) {
-		order[mVals[{c, i}]] = 1;
-	}
+	int change = d;
+	// color c
+	if (cPath) change = c;
+	// color d
+	if (dPath) change = d;
 
+	trav (i, h[change]) order[mVals[{change, i}]] = 1;
+	
+	cout << 2 << nl;
 	trav (i, order) cout << i << nl;
 }
  
