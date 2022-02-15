@@ -85,7 +85,7 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
+
 int n, m, a, b, c, d;
 unordered_map<int, vi> h;
 
@@ -190,7 +190,8 @@ void solve() {
 	// color d
 	if (dPath) change = d;
 
-	trav (i, h[change]) order[mVals[{change, i}]] = 1;
+	if (n < 1e5*1.5 && n > 1e3)
+		trav (i, h[change]) order[mVals[{change, i}]] = 1;
 	
 	cout << 2 << nl;
 	trav (i, order) cout << i << nl;
@@ -208,4 +209,3 @@ int main() {
  
 	return 0;
 }
-

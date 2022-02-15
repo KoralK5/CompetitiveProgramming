@@ -157,6 +157,19 @@ void solve() {
 					if (node.sec == 0) {
 						que.push({neigh, 1});
 					}
+					// go back to C or D and make everything not visited
+					// make C visited?
+					// THIS CASE SHOULD NOT OCCUR!
+					else {
+						// cout << "CASE" << nl;
+						int curNode = neigh;
+						int chNode = neigh==c?d:c;
+						while (curNode != chNode) {
+							int temp = recVis[curNode];
+							recVis[curNode] = 0;
+							curNode = temp;
+						}
+					}
 				}
 				else {
 					que.push({neigh, 0});
@@ -184,14 +197,12 @@ void solve() {
 		// cout << node.fir << ' ' << node.sec << nl;
 	}
 
+	// change the color based on which one does not work
 	int change = c;
-	// color c
-	if (cPath) change = c;
-	// color d
-	if (dPath) change = d;
+	if (!cPath) change = d;
+	if (!dPath) change = c;
 
-	if (n < 1e5*1.5 && n > 1e3)
-		trav (i, h[change]) order[mVals[{change, i}]] = 1;
+	trav (i, h[change]) order[mVals[{change, i}]] = 1;
 	
 	cout << 2 << nl;
 	trav (i, order) cout << i << nl;

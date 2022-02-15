@@ -86,115 +86,35 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-int n, m, a, b, c, d;
-unordered_map<int, vi> h;
-
-// dfs to see if there is a path between A and D that does not visit C and D
-// if all paths from A-B covers C and D, -1
-// make C visited, then D visited
-unordered_map<int, bool> visited;
-bool dfs(int node) {
-	if (node == b) return true;
-
-	if (!visited[node]) {
-		visited[node] = true;
-		trav (neigh, h[node]) {
-			if (dfs(neigh)) {
-				return true;
-			}
-		}
-	}
-
-	return false;
+ll nPr(ll n, ll r) {
+	ll res=1;
+	ll denom = n-r;
+	for (ll cur=n; cur>denom; cur--) res *= cur;
+	return res;
 }
 
+ 
 void solve() {
-	// use maximum 2 colors (don't care about C to D)
-	// A to B is the same color
-	cin >> n >> m;
-	map<pi, int> mVals;
+	int n, m; cin >> n >> m;
+	// n = 1, m <= 300 (brute forcable)
+	// find the size of each region;
+	string s; cin >> s;
+
+	vll res(m, 1);
 	FOR (i, 0, m) {
-		int a, b; cin >> a >> b;
-		h[a].pb(b);
-		h[b].pb(a);
-		mVals[{a, b}] = i;
-		mVals[{b, a}] = i;
-	}
-
-	cin >> a >> b >> c >> d;
-	if (find(all(h[c]), d) != h[c].end()) {
-		cout << -1 << nl;
-		return;
-	}
-
-	// whichever does not work
-	visited[c] = true;
-	bool cPath = dfs(a);
-
-	visited.clear();
-	visited[d] = true;
-	bool dPath = dfs(a);
-
-	if (!cPath && !dPath) {
-		cout << -1 << nl;
-		return;
-	}
-
-	// now we know it must work
-	// bfs from A to B (can use just 2 colors)
-	// reconstruct by keeping track of each parent node in the neighbor
-	queue<pair<int, bool>> que;
-	que.push({a, false});
-	unordered_map<int, int> recVis;
-	recVis[a] = true;
-	while (!que.empty()) {
-		pi node = que.front(); que.pop();
-		trav (neigh, h[node.fir]) {
-			if (recVis[neigh] == 0) {
-				recVis[neigh] = node.fir;
-
-				if (neigh == c || neigh == d) {
-					if (node.sec == 0) {
-						que.push({neigh, 1});
-					}
-				}
-				else {
-					que.push({neigh, 0});
-				}
-			}
-			if (neigh == b) {
-				break;
-			}
+		vi regions;
+		FOR (j, 0, m) {
+			if (j == i) continue;
+			if (s[j] != s[j-1] || j == i+1) 
+				regions.pb(1);
+			else
+				regions[sz(regions)-1]++;
+		}
+		trav (k, regions) {
+			res[i] *= nPr(k, 2);
 		}
 	}
-
-	stack<pi> stk;
-	int node = b;
-	while (node != a) {
-		stk.push({recVis[node], node});
-		node = recVis[node];
-	}
-
-	vi order(m, 2);
-
-	// color the A-B path 1
-	while (!stk.empty()) {
-		pi node = stk.top(); stk.pop();
-		order[mVals[node]] = 1;
-		// cout << node.fir << ' ' << node.sec << nl;
-	}
-
-	int change = c;
-	// color c
-	if (cPath) change = c;
-	// color d
-	if (dPath) change = d;
-
-	if (n < 1e5*1.5 && n > 1e3)
-		trav (i, h[change]) order[mVals[{change, i}]] = 1;
-	
-	cout << 2 << nl;
-	trav (i, order) cout << i << nl;
+	trav (i, res) cout << i << ' ';
 }
  
 int main() {
@@ -209,3 +129,4 @@ int main() {
  
 	return 0;
 }
+
