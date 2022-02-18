@@ -94,6 +94,7 @@ void preComp(int m) {
 	FOR (i, 1, m+1) {
 		facts[i] = facts[i-1]*i;
 	}
+	facts[0] = 0;
 }
  
 void solve() {
@@ -102,27 +103,34 @@ void solve() {
 	preComp(m);
 
 	k -= n;
-	vi res(n);
+	vi res(n, -1);
 	// go until there is some restriction on k
 	// upper_bound factorial values and find highest m usable
 	FOR (i, 0, n) {
-		auto bestIdx = lower_bound(facts.begin()+1, facts.end(), k);
-		if (bestIdx == facts.end()) {
-			cout << -1 << nl;
-			return;
-		}
-		int j=1;
-		for (; j<bestIdx-facts.begin()+1; j++) {
-			res[i+j-1] = j;
-		}
+		auto bestIdx = upper_bound(facts.begin(), facts.end(), k);
 
-		i = j;
-		k -= facts[bestIdx - facts.begin()];
+		int loc = bestIdx - facts.begin() - 1;
+		if (bestIdx == facts.end()) loc = m;
+
+		int j=1;
+		for (; j<=loc; j++) res[i+j-1] = j;
+
+		i += j-1;
+		k -= facts[loc];
+		if (k == 0) break;
+
+		// cout << k << ' ' << loc << ' ' << facts[loc] << nl;
 	}
+
+	// cout << k << nl;
 	if (k == 0) {
-		FOR (i, 0, n) {
-			cout << res[i];
+		int prev=res[0], i=0;
+		for (; i<n ; i++) {
+			if (res[i] == -1) cout << prev;
+			else cout << res[i];
 			if (i != n) cout << ' ';
+
+			prev = res[i];
 		}
 	}
 	else {
