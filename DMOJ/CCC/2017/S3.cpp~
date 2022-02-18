@@ -63,7 +63,7 @@ void solve() {
 	int n; cin >> n;
 	vi a(n); FOR (i, 0, n) cin >> a[i];
 	unordered_map<int, int> sumFreqs;
-	FOR (i, 0, n-1) {
+	FOR (i, 0, n) {
 		FOR (j, i+1, n) {
 			sumFreqs[a[i]+a[j]]++;
 		}
@@ -78,7 +78,7 @@ void solve() {
 			ans++;
 		}
 	}
-	cout << len << ' ' << ans;
+	cout << len << ' ' << ans << nl;
 }
  
 int main() {
