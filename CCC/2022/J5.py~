@@ -29,6 +29,7 @@ for i in range(t):
 ans = 0
 for i in range(1, n+1):
     for j in range(1, n+1):
+        # if (best(i, j) > ans): print(i, j)
         ans = max(ans, best(i, j))
 
 print(ans)

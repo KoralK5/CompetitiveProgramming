@@ -86,67 +86,43 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-int n, m;
-ll k;
-vll facts;
-
-// fact(1e4) > 1e18 (K) so this shouldn't MLE or TLE
-void preComp(int m) {
-	facts[0] = 1;
-	FOR (i, 1, m+1) {
-		facts[i] = facts[i-1]*i;
-		if (facts[i] >= k) break;
-	}
-	facts[0] = 0;
-}
- 
-void solve() {
-	cin >> n >> m >> k;
-	facts.resize(m+1);
-	preComp(m);
-
-	k -= n;
-	vi res(n, -1);
-	// go until there is some restriction on k
-	// upper_bound factorial values and find highest m usable
-	FOR (i, 0, n) {
-		auto bestIdx = upper_bound(facts.begin(), facts.end(), k);
-
-		int loc = bestIdx - facts.begin();
-		if (bestIdx == facts.end()) loc = m;
-		
-		// cout << k << ' ' << loc << ' ' << facts[loc] << nl;
-
-		int j=1;
-		for (; j<=loc; j++) res[i+j-1] = j;
-
-		i += j-1;
-		k -= facts[loc];
-		if (k == 0) break;
-	}
-
-	// cout << k << nl;
-	if (k == 0) {
-		int prev=res[0];
-		FOR (i, 0, n) {
-			if (res[i] == -1) cout << prev;
-			else cout << res[i];
-			if (i != n) cout << ' ';
-
-			prev = res[i];
+vi primes;
+vector<bool> is_prime(1e8+1, true);
+void sieve(int n) {
+	is_prime[0] = is_prime[1] = false;
+	for (int i = 2; i * i <= n; i++) {
+		if (is_prime[i]) {
+			primes.push_back(i);
+			for (int j = i * i; j <= n; j += i)
+				is_prime[j] = false;
 		}
 	}
-	else {
+}
+
+void solve() {
+	ll n; cin >> n;
+	ll coins = n*n+1;
+	if (is_prime[coins]) {
 		cout << -1 << nl;
+		return;
 	}
+	trav (i, primes) {
+		if (i > n) break;
+		if (coins%i == 0) {
+			cout << i << ' ' << coins/i << nl;
+			return;
+		}
+	}
+	cout << -1 << nl;
 }
  
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
  
+	sieve(1e8);
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }

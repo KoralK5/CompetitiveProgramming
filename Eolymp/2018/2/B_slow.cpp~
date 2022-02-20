@@ -86,59 +86,34 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-int n, m;
-ll k;
-vll facts;
-
-// fact(1e4) > 1e18 (K) so this shouldn't MLE or TLE
-void preComp(int m) {
-	facts[0] = 1;
-	FOR (i, 1, m+1) {
-		facts[i] = facts[i-1]*i;
-		if (facts[i] >= k) break;
-	}
-	facts[0] = 0;
+void collect_digits(vector<int>& digits, unsigned long num) {
+    if (num > 9) {
+        collect_digits(digits, num / 10);
+    }
+    digits.push_back(num % 10);
 }
  
 void solve() {
-	cin >> n >> m >> k;
-	facts.resize(m+1);
-	preComp(m);
-
-	k -= n;
-	vi res(n, -1);
-	// go until there is some restriction on k
-	// upper_bound factorial values and find highest m usable
-	FOR (i, 0, n) {
-		auto bestIdx = upper_bound(facts.begin(), facts.end(), k);
-
-		int loc = bestIdx - facts.begin();
-		if (bestIdx == facts.end()) loc = m;
-		
-		// cout << k << ' ' << loc << ' ' << facts[loc] << nl;
-
-		int j=1;
-		for (; j<=loc; j++) res[i+j-1] = j;
-
-		i += j-1;
-		k -= facts[loc];
-		if (k == 0) break;
+	ll n; cin >> n;
+	int k, cur; cin >> k;
+	unordered_map<int, bool> rest;
+	FOR (i, 0, k) {
+		cin >> cur;
+		rest[cur] = true;
 	}
-
-	// cout << k << nl;
-	if (k == 0) {
-		int prev=res[0];
-		FOR (i, 0, n) {
-			if (res[i] == -1) cout << prev;
-			else cout << res[i];
-			if (i != n) cout << ' ';
-
-			prev = res[i];
-		}
+	ll ans=0;
+	FOR (i, 1, n+1) {
+		vi digits;
+		collect_digits(digits, i);
+		bool works = true;
+		trav (j, digits)
+			if (rest[j]) {
+				works = false;
+				break;
+			}
+		ans += works;
 	}
-	else {
-		cout << -1 << nl;
-	}
+	cout << ans << nl;
 }
  
 int main() {

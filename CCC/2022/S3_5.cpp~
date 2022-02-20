@@ -86,13 +86,16 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-int n, m, k;
+int n, m;
+ll k;
 vll facts;
 
+// fact(1e4) > 1e18 (K) so this shouldn't MLE or TLE
 void preComp(int m) {
 	facts[0] = 1;
 	FOR (i, 1, m+1) {
 		facts[i] = facts[i-1]*i;
+		if (facts[i] >= k) break;
 	}
 	facts[0] = 0;
 }
@@ -109,8 +112,10 @@ void solve() {
 	FOR (i, 0, n) {
 		auto bestIdx = upper_bound(facts.begin(), facts.end(), k);
 
-		int loc = bestIdx - facts.begin() - 1;
+		int loc = bestIdx - facts.begin();
 		if (bestIdx == facts.end()) loc = m;
+		
+		// cout << k << ' ' << loc << ' ' << facts[loc] << nl;
 
 		int j=1;
 		for (; j<=loc; j++) res[i+j-1] = j;
@@ -118,14 +123,12 @@ void solve() {
 		i += j-1;
 		k -= facts[loc];
 		if (k == 0) break;
-
-		// cout << k << ' ' << loc << ' ' << facts[loc] << nl;
 	}
 
 	// cout << k << nl;
 	if (k == 0) {
-		int prev=res[0], i=0;
-		for (; i<n ; i++) {
+		int prev=res[0];
+		FOR (i, 0, n) {
 			if (res[i] == -1) cout << prev;
 			else cout << res[i];
 			if (i != n) cout << ' ';
