@@ -85,63 +85,33 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-int NCR(int n, int r)
-{
-    if (r == 0) return 1;
-
-    /*
-     Extra computation saving for large R,
-     using property:
-     N choose R = N choose (N-R)
-    */
-    if (r > n / 2) return NCR(n, n - r); 
-
-    long res = 1; 
-
-    for (int k = 1; k <= r; ++k)
-    {
-        res *= n - k + 1;
-        res /= k;
-    }
-
-    return res;
-}
  
 void solve() {
 	int n; cin >> n;
-	string s; cin >> s;
-	unordered_map<int, vi> graph;
-	// assuming there's a root
+	vll a(n); FOR (i, 0, n) cin >> a[i];
+	if (n == 1) {
+		cout << 0 << nl;
+		return;
+	}
+	if (n == 2) {
+		cout << (a[0]!=a[1]?-1:0) << nl;
+		return;
+	}
+	ll ans=0, mn=*min_element(all(a));
 	FOR (i, 0, n-1) {
-		int u, v; cin >> u >> v;
-		graph[u].pb(v);
-		graph[v].pb(u);
-	}
-
-	/*
-	bool st=true;
-	trav (i, graph) {
-		if (sz(i.sec) != 1) {
-			st = false;
-			break;
-		}
-	}
-	*/
-
-	int ans=0;
-	FOR (i, 0, n-2) {
-		int w=0;
-		FOR (j, i, n) {
-			w += (s[j] == 'W');
-			if (w>=3 || ((j-i+1)-w>=3)) {
-				ans += NCR(n-j, 3);
-				break;
+		ll diff = a[i] - mn;
+		a[i+1] -= diff;
+		ans += diff*2;
+		if (a[i+1] < mn) {
+			if ((i+1)%2 || a[i+1]<0) {
+				cout << -1 << nl;
+				return;
 			}
+			ans += (i+1)*(mn-a[i+1]);
+			mn = a[i+1];
 		}
 	}
 	cout << ans << nl;
-	// cout << dfs(1, 0, 0) << nl;
 }
  
 int main() {
@@ -149,10 +119,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+
