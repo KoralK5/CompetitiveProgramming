@@ -85,41 +85,48 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-vi n(3), b(3);
-bool check(vi a) {
-	sort(all(a));
-	return a[0]==b[0] && a[1]==b[1] && a[2]==b[2];
-}
-
-int ans=1e9;
-int dfs(vi a, int depth) {
-	if (check(a)) return depth;
-	if (depth >= min(ans, 12)) return 1e9;
-
-	FOR (c1, 0, 3) {
-		FOR (c2, 0, 3) {
-			int limit = n[c2];
-			int add = min(limit-a[c2], a[c1]);
-			if (add==0 || c1==c2) continue;
-			
-			vi ca = a;
-			ca[c1] -= add;
-			ca[c2] += add;
-			ans = min(ans, dfs(ca, depth+1));
-		}
-	}
-	return ans;
-}
  
 void solve() {
-	vi a(3);
-	FOR (i, 0, 3) cin >> n[i];
-	FOR (i, 0, 3) cin >> a[i];
-	FOR (i, 0, 3) cin >> b[i];
-	sort(all(b));
-	dfs(a, 0);
-	cout << (ans!=1e9?ans:-1) << nl;
+	int n, m; cin >> n >> m;
+	vector<vi> a(n), b(m);
+	vector<bool> ver(m, false);
+	FOR (i, 0, n) {
+		string s; cin >> s;
+		bool hor=false;
+		FOR (j, 0, m) {
+			if (s[j] == '#' && !hor) {
+				a[i].pb(1);
+				hor = true;
+			}
+			else if (s[j] == '#') {
+				a[i][sz(a[i])-1]++;
+			}
+			else {
+				hor = false;
+			}
+			if (s[j] == '#' && !ver[j]) {
+				b[j].pb(1);
+				ver[j] = true;
+			}
+			else if (s[j] == '#') {
+				b[j][sz(b[j])-1]++;
+			}
+			else {
+				ver[j] = false;
+			}
+		}
+	}
+	trav (i, a) {
+		cout << sz(i) << ' ';
+		trav (j, i) cout << j << ' ';
+		cout << nl;
+	}
+	cout << nl;
+	trav (i, b) {
+		cout << sz(i) << ' ';
+		trav (j, i) cout << j << ' ';
+		cout << nl;
+	}
 }
  
 int main() {

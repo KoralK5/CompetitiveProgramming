@@ -95,14 +95,15 @@ bool check(vi a) {
 int ans=1e9;
 int dfs(vi a, int depth) {
 	if (check(a)) return depth;
-	if (depth >= min(ans, 8)) return 1e9;
+	if (depth >= min(ans, 12)) return 1e9;
 
 	FOR (c1, 0, 3) {
 		FOR (c2, 0, 3) {
-			if (c1 == c2) continue;
-			vi ca = a;
 			int limit = n[c2];
 			int add = min(limit-a[c2], a[c1]);
+			if (add==0 || c1==c2) continue;
+			
+			vi ca = a;
 			ca[c1] -= add;
 			ca[c2] += add;
 			ans = min(ans, dfs(ca, depth+1));
@@ -118,7 +119,7 @@ void solve() {
 	FOR (i, 0, 3) cin >> b[i];
 	sort(all(b));
 	dfs(a, 0);
-	cout << (ans<1e9?ans:-1) << nl;
+	cout << (ans!=1e9?ans:-1) << nl;
 }
  
 int main() {

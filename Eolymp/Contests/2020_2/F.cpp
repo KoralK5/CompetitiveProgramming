@@ -85,41 +85,35 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-vi n(3), b(3);
-bool check(vi a) {
-	sort(all(a));
-	return a[0]==b[0] && a[1]==b[1] && a[2]==b[2];
-}
-
-int ans=1e9;
-int dfs(vi a, int depth) {
-	if (check(a)) return depth;
-	if (depth >= min(ans, 12)) return 1e9;
-
-	FOR (c1, 0, 3) {
-		FOR (c2, 0, 3) {
-			int limit = n[c2];
-			int add = min(limit-a[c2], a[c1]);
-			if (add==0 || c1==c2) continue;
-			
-			vi ca = a;
-			ca[c1] -= add;
-			ca[c2] += add;
-			ans = min(ans, dfs(ca, depth+1));
-		}
-	}
-	return ans;
-}
  
 void solve() {
-	vi a(3);
-	FOR (i, 0, 3) cin >> n[i];
-	FOR (i, 0, 3) cin >> a[i];
-	FOR (i, 0, 3) cin >> b[i];
-	sort(all(b));
-	dfs(a, 0);
-	cout << (ans!=1e9?ans:-1) << nl;
+	int n; cin >> n;
+	// store the amount and time
+	deque<pll> que;
+	ll ans=0, b; cin >> b;
+	FOR (i, 1, n+1) {
+		ll cur, sum=0; cin >> cur;
+		que.push_front({cur, i});
+		while (!que.empty() && sum<b) {
+			pll fr = que.front();
+			if (sum + fr.fir <= b) {
+				ans += fr.fir*(i-fr.sec+1);
+			}
+			else {
+				ll add = b - sum;
+				ans += add*(i-fr.sec+1);
+				que.push_back({fr.fir-add, i});
+			}
+			que.pop_front();
+			sum += fr.fir;
+		}
+	}
+	while (!que.empty()) {
+		pll fr = que.front();
+		que.pop_front();
+		ans += fr.fir*(n-fr.sec+2);
+	}
+	cout << ans << nl;
 }
  
 int main() {
