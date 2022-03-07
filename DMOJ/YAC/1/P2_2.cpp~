@@ -95,13 +95,13 @@ void solve() {
 		m[a].pb(b);
 		m[b].pb(a);
 	}
-	vi black(n+1, 0), white(n+1, 0);
+	vi black(n, 0), white(n, 0);
 	trav (i, m) {
 		trav (j, i.sec) {
 			if (s[j] == 'W')
-				white[i.fir]++;
+				white[i.fir-1]++;
 			else
-				black[i.fir]++;
+				black[i.fir-1]++;
 		}
 	}
 	ll ans=0;
