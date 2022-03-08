@@ -87,8 +87,15 @@ const char nl = '\n';
 const int MX = 100001; 
 
 void solve() {
-	ll n; cin >> n;
-	cout << pow(n, (n+1)/2) + pow(n-1, n/2) << nl;
+	ll n; cin >> n; n--;
+
+	ll f1=1;
+	FOR (i, 1, n+1) f1 = (f1*i)%MOD;
+
+	ll f2=f1;
+	FOR (i, n+1, 2*n+1) f2 = (f2*i)%MOD;
+
+	cout << f2/f1 << nl;
 }
  
 int main() {

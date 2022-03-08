@@ -150,7 +150,6 @@ void solve() {
 		if (val == 1) e.fir++;
 		if (val == 2) e.fir--;
 	}
-
 	trav (i, a) cout << i << nl;
 }
  
