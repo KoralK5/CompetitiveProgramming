@@ -87,32 +87,40 @@ const char nl = '\n';
 const int MX = 100001; 
 
 vs combs;
-al = "abcdefghijklmnopqrstuvwxyz";
-
+string al = "abcdefghijklmnopqrstuvwxyz";
 int cost(string a, string b) {
-	int ans=0;
+    int res=0;
 	FOR (i, 0, 4) {
-		int diff = (a[i]-'0')-(b[i]-'0');
-		int ans+=diff;
+		int add = abs(a[i]-b[i]);
+		add = min(add, abs(a[i] - ('a'-('z'-b[i]+1))));
+		add = min(add, abs(b[i] - ('a'-('z'-a[i]+1))));
+		res += add;
 	}
-	return ans;
+	return res;
 }
- 
+
 void solve() {
+	int n; cin >> n;
+	string s; cin >> s;
+	
 	trav (i, al) {
 		trav (j, al) {
 			trav (k, al) {
 				trav (l, al) {
-					combs.pb(i+j+k+l);
+				    string cb="";
+				    cb += i;
+				    cb += j;
+				    cb += k;
+				    cb += l;
+					combs.pb(cb);
 				}
 			}
 		}
 	}
-	int n; cin >> n;
-	string s; cin >> s;
+	
 	set<string> vals;
 	trav (i, combs) {
-		if (cost(combs, s) < n) {
+		if (cost(s, i) <= n) {
 			vals.insert(i);
 		}
 	}
@@ -131,4 +139,3 @@ int main() {
  
 	return 0;
 }
-
