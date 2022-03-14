@@ -85,11 +85,25 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+
+ll p2(ll n) {
+   return pow(2, (ll)log2(n));
+}
  
 void solve() {
-	// ans is (n-1) + extra
-	int n, k; cin >> n >> k;
-	cout << (n-2)*(n-1) << nl;
+	ll n, k; cin >> n >> k;
+	ll divs=0, tK=k+1;
+	while (tK!=1) {
+		tK /= 2;
+		divs++;
+	}
+
+	ll ans = divs*divs;
+
+	// add remaining
+
+	cout << ans << nl;
 }
  
 int main() {

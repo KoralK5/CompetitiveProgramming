@@ -86,23 +86,49 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
+vector<vll> dp(52, vll(2, 0)), dp1(52, vll(2, 0));
+vll pdp(52, 0), pdp1(52, 0), prefs(52, 0);
+ll sums=1, sums1=0, cnt=0;
 
-ll p2(ll n) {
-   return pow(2, (ll)log2(n));
+void preComp() {
+	dp[0][0]=1; dp[0][1]=0; pdp[0] = 1;
+	FOR (i, 1, 52) {
+		dp[i][1] += dp[i-1][0] + dp[i-1][1];
+		dp[i][0] += dp[i-1][0] + dp[i-1][1];
+
+		dp1[i][1] += dp[i-1][0] + dp[i-1][1] + dp1[i-1][0] + dp1[i-1][1];
+		dp1[i][0] += dp1[i-1][0] + dp1[i-1][1];
+
+		sums += dp[i][0] + dp[i][1];
+		pdp[i] = sums;
+
+		sums1 += dp1[i][0] + dp[i][1];
+		pdp1[i] = sums1;
+		
+		cnt += sums1;
+		prefs[i] = cnt;
+	}
 }
  
 void solve() {
-	ll n, k; cin >> n >> k;
-	ll divs=0, tK=k+1;
-	while (tK!=1) {
-		tK /= 2;
-		divs++;
+	ll n, k, cur=1, cur1=1, ans=1; cin >> n >> k;
+	FOR (i, 1, 52) {
+		if (cur >= k) break;
+
+		ll tot=pdp[n-i-1];
+		if (tot + cur < k) {
+			ans += cur1*tot + pdp1[n-i-1] + cur1+1;
+			cur1++;
+			cur += tot+1;
+			if (n > 3 && i <= n-3) {
+				ans += prefs[n-(i+2)];
+			}
+		}
+		else {
+			ans += cur1;
+			cur++;
+		}
 	}
-
-	ll ans = divs*divs;
-
-	// add remaining
-
 	cout << ans << nl;
 }
  
@@ -110,6 +136,7 @@ int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
  
+	preComp();
     int T = 1;
 	cin >> T;
     while(T--) {
