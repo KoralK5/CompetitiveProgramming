@@ -102,7 +102,7 @@ template<class T> struct node {
 			c[1]->upd(ind,v,M+1,R);
 		}
 		sm=0; mx=0;
-		F0R(i,2) {
+		F0R(i, 2) {
 			if (c[i]) {
 				sm += c[i]->sm;
 				mx = max(mx, c[i]->mx);
