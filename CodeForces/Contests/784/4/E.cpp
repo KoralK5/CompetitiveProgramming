@@ -85,14 +85,25 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+bool check(string a, string b) {
+	return ((a[0]==b[0])+(a[1]==b[1])) == 1;
+}
  
 void solve() {
 	int n; cin >> n;
-	unordered_map<string, int> freq;
+	unordered_map<string, ll> freq;
 	FOR (i, 0, n) {
 		string s; cin >> s;
 		freq[s]++;
 	}
+	ll ans=0;
+	trav (i, freq) {
+		trav (j, freq) {
+			ans += check(i.fir, j.fir)*i.sec*j.sec;
+		}
+	}
+	cout << ans/2 << nl;
 }
  
 int main() {
