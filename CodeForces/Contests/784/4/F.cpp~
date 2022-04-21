@@ -90,30 +90,20 @@ void solve() {
 	int n; cin >> n;
 	vi a(n); FOR (i, 0, n) cin >> a[i];
 	vi pf(n, 0), sf(n, 0);
-
-	unordered_map<int, int> idxP;
-	unordered_map<int, int> idxS;
 	pf[0] = a[0];
 	sf[0] = a[n-1];
-	idxP[a[0]] = 1;
-	idxS[a[n-1]] = 1;
+	FOR (i, 1, n) pf[i] = pf[i-1] + a[i];
+	FOR (i, 1, n) sf[i] = sf[i-1] + a[n-i-1];
 
-	FOR (i, 1, n) {
-		pf[i] = pf[i-1] + a[i];
-		idxP[pf[i]] = i+1;
-	}
-	FOR (i, 1, n) {
-		sf[i] = sf[i-1] + a[n-i-1];
-		idxS[sf[i]] = i+1;
-	}
-
-	int ans = 0;
-	trav (i, idxP) {
-		int idx1 = i.sec;
-		int idx2 = idxS[i.fir];
-
-		if (idx2 == 0) continue;
-		ans = max(ans, idx1+idx2);
+	int ans=0, j=0;
+	FOR (i, 0, n) {
+		while (pf[j] < sf[i]) {
+			j++;
+		}
+		while (sf[i] == pf[j] && i+j<n-1) {
+			ans = max(ans, i+j+2);
+			j++;
+		}
 	}
 	cout << ans << nl;
 }
