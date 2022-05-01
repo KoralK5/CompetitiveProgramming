@@ -87,8 +87,8 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
- 
- 
+	int n; cin >> n;
+	cout << n << nl;
 }
  
 int main() {
@@ -103,3 +103,4 @@ int main() {
  
 	return 0;
 }
+
