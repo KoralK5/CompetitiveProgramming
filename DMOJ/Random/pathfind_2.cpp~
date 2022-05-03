@@ -86,56 +86,81 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-struct hash_pair {
-    template <class T1, class T2>
-    size_t operator()(const pair<T1, T2>& p) const {
-        auto hash1 = hash<T1>{}(p.first);
-        auto hash2 = hash<T2>{}(p.second);
- 
-        if (hash1 != hash2) {
-            return hash1 ^ hash2;             
-        }
-
-		return hash1;
-    }
-};
-
-int n, m;
-// unordered_map<pair<int, int>, bool, hash_pair> grid;
-// unordered_map<pair<int, int>, bool, hash_pair> seen;
-
-vector<vector<bool>> grid;
-vector<vector<bool>> seen;
-
-vi dx = {-1, 1, 0, 0};
-vi dy = {0, 0, -1, 1};
-
-bool dfs(int x, int y) {
-	if (x==n-1 && y==m-1) return true;
-	seen[x][y] = true;
-	FOR (i, 0, 4) {
-		int nx = x+dx[i];
-		int ny = y+dy[i];
-		if (nx<0 || nx>=n || ny<0 || ny>=m) continue;
-		if (seen[nx][ny] || grid[nx][ny]) continue;
-		if (dfs(nx, ny)) return true;
+void print(vector<vector<bool>> a) {
+	FOR (i, 0, sz(a)) {
+		FOR (j, 0, sz(a[i])) {
+			cout << (a[i][j]?'#':'.') << ' ';
+		}
+		cout << nl;
 	}
-	return false;
 }
  
 void solve() {
-	int k; cin >> n >> m >> k;
-	grid.resize(n, vector<bool>(m));
-	seen.resize(n, vector<bool>(m));
+	int n, m, k; cin >> n >> m >> k;
+	n+=2; m+=2;
+	vector<vector<bool>> grid(n, vector<bool>(m, false));
 	FOR (i, 0, k) {
 		int r, c; cin >> r >> c;
-		r--; c--;
 		grid[r][c] = true;
 	}
-	
-	// trim the map
+	FOR (i, 0, n) grid[i][0] = true;
+	FOR (i, 0, n) grid[i][n-1] = true;
+	FOR (j, 0, n) grid[0][j] = true;
+	FOR (j, 0, n) grid[m-1][j] = true;
+	print(grid);
 
-	cout << (dfs(0, 0)?"YES":"NO") << nl;
+	// follow the walls
+	// if you hit wall, turn right
+	char dir='r';
+	int x=1, y=1;
+	FOR (i, 0, 1e5) {
+		cout << x << ' ' << y << nl;
+		if (x==n && y==m) {
+			cout << "YES" << nl;
+			return;
+		}
+		if (dir == 'r') {
+			int nx=x, ny=y+1;
+			if (!grid[nx][ny]) {
+				x = nx;
+				y = ny;
+			}
+			else {
+				dir = 'd';
+			}
+		}
+		else if (dir == 'd') {
+			int nx=x+1, ny=y;
+			if (!grid[nx][ny]) {
+				x = nx;
+				y = ny;
+			}
+			else {
+				dir = 'l';
+			}
+		}
+		else if (dir == 'l') {
+			int nx=x, ny=y-1;
+			if (!grid[nx][ny]) {
+				x = nx;
+				y = ny;
+			}
+			else {
+				dir = 'u';
+			}
+		}
+		else if (dir == 'u') {
+			int nx=x-1, ny=y;
+			if (!grid[nx][ny]) {
+				x = nx;
+				y = ny;
+			}
+			else {
+				dir = 'r';
+			}
+		}
+	}
+	cout << "NO" << nl;
 }
  
 int main() {
