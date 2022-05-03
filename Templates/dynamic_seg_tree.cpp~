@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int e = 0;
+
+int func(int a, int b) {
+	return a + b;
+}
+
+struct seg_node {
+	seg_node *left, *right;
+	int value;
+};
+
+void init(vector<int> &vec, seg_node *node, int left, int right) {
+	if(left == right) {
+		int lim = vec.size();
+		if (lim < left)
+			node->value = 0;
+		else
+			node->value = vec[left - 1];
+		return;
+	}
+	node->left = new seg_node;
+	node->right = new seg_node;
+	init(vec, node->left, left, (left + right) >> 1);
+	init(vec, node->right, ((left + right) >> 1) + 1, right);
+	node->value = func(node->left->value, node->right->value);
+}
+
+void update(seg_node *node, int left, int right, int index, int value) {
+	if(index < left || right < index) return;
+	if(left == right) {
+		node->value = value;
+		return;
+	}
+	if(node->left == nullptr) node->left = new seg_node;
+	if(node->right == nullptr) node->right = new seg_node;
+	update(node->left, left, (left + right) >> 1, index, value);
+	update(node->right, ((left + right) >> 1) + 1, right, index, value);
+	node->value = func(node->left->value, node->right->value);
+}
+
+int query(seg_node *node, int left, int right, int start, int end) {
+	if(right < start || end < left || node == nullptr) return e;
+	if(start <= left && right <= end) return node->value;
+	int mid = (left + right) >> 1;
+	return func(query(node->left, left, mid, start, end), query(node->right, mid + 1, right, start, end));
+}
+
+int main() {
+	int size = 4;
+	auto *root = new seg_node;
+	vector<int> v{1, 2, 3, 4};
+	init(v, root, 1, size);
+	update(root, 1, size, 2, 4);
+	cout << query(root, 1, size, 2, 4) << endl;
+}
