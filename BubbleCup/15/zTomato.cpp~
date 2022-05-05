@@ -68,16 +68,16 @@ template <class T> void _print(vector <T> v);
 template <class T> void _print(set <T> v);
 template <class T, class V> void _print(map <T, V> v);
 template <class T> void _print(multiset <T> v);
-template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.ff); cerr << ","; _print(p.ss); cerr << "}";}
+template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.fir); cerr << ","; _print(p.sec); cerr << "}";}
 template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
 
 #ifndef ONLINE_JUDGE
-#define debug(x) cerr << #x <<" "; _print(x); cerr << endl;
+#define dbg(x) cerr << "| " << #x << " = "; _print(x); cerr << " |" << endl;
 #else
-#define debug(x)
+#define dbg(x)
 #endif
  
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
@@ -85,40 +85,23 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-int n, d;
-vi a, que, dp;
-
-int cost(int idx) {
-	return (sz(que)-idx)*que[idx];
-}
-
+ 
 void solve() {
 	int n, d; cin >> n >> d;
-	a.resize(n); FOR (i, 0, n) cin >> a[i];
+	vi a(n); FOR (i, 0, n) cin >> a[i];
 
-	// binary search for lowest cost
-	vi que;
-
-	// dp of the min cost (maybe use ll)
-	dp.resize(n, 1e9);
+	// dp -> store best price at each step
+	vi dp(n, 1e9);
 	dp[0] = a[0];
-	que.pb(a[0]);
 	FOR (i, 1, n) {
-		// keep last d days
-		if (sz(que) == d) que.erase(que.begin());
-		que.pb(a[i]);
-
-		trav (i, que) {
-			dp[i] = min(dp[i], cost(i));
+		FOR (j, 1, i+1) {
+			dp[i] = min(dp[i], a[j]*(int)ceil((double)i/d) + dp[j-1]);
 		}
 	}
-	FOR (i, 0, 1e9) {
-		continue;
-	}
+	dbg(dp);
 	cout << dp[n-1] << nl;
 }
- 
+
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);

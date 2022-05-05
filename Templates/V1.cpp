@@ -75,7 +75,7 @@ template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_pr
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
 
 #ifndef ONLINE_JUDGE
-#define dbg(x) cerr << "\e[91m" << #x << " = "; _print(x); cerr << "\e[39m" << endl;
+#define dbg(x) cerr << "| " << #x << " = "; _print(x); cerr << " |" << endl;
 #else
 #define dbg(x)
 #endif
