@@ -91,32 +91,32 @@ vector<vi> a;
 
 int calc(int x, int y) {
 	int res=0;
-	int idxX=x, idxY=y;
+	int idxX=x+1, idxY=y+1;
 	while (idxX < n && idxY < m) {
 		res += a[idxY][idxY];
 		idxX++;
 		idxY++;
 	}
-	idxX=x, idxY=y;
+	idxX=x-1, idxY=y+1;
 	while (idxX >= 0 && idxY < m) {
 		res += a[idxY][idxY];
 		idxX--;
 		idxY++;
 	}
-	idxX=x, idxY=y;
+	idxX=x-1, idxY=y-1;
 	while (idxX >= 0 && idxY >= 0) {
 		res += a[idxY][idxY];
 		idxX--;
 		idxY--;
 	}
-	idxX=x, idxY=y;
+	idxX=x+1, idxY=y-1;
 	while (idxX < n && idxY >= 0) {
 		res += a[idxY][idxY];
 		idxX++;
 		idxY--;
 	}
 
-	res -= a[x][y]*3;
+	res += a[x][y];
 
 	return res;
 }

@@ -93,27 +93,27 @@ int calc(int x, int y) {
 	int res=0;
 	int idxX=x+1, idxY=y+1;
 	while (idxX < n && idxY < m) {
+		res += a[idxY][idxY];
 		idxX++;
 		idxY++;
-		res += a[idxY][idxY];
 	}
 	idxX=x-1, idxY=y+1;
 	while (idxX >= 0 && idxY < m) {
+		res += a[idxY][idxY];
 		idxX--;
 		idxY++;
-		res += a[idxY][idxY];
 	}
 	idxX=x-1, idxY=y-1;
 	while (idxX >= 0 && idxY >= 0) {
+		res += a[idxY][idxY];
 		idxX--;
 		idxY--;
-		res += a[idxY][idxY];
 	}
 	idxX=x+1, idxY=y-1;
 	while (idxX < n && idxY >= 0) {
+		res += a[idxY][idxY];
 		idxX++;
 		idxY--;
-		res += a[idxY][idxY];
 	}
 
 	res += a[x][y];
