@@ -85,64 +85,49 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-void print(vector<vi> a) {
-	trav (i, a) {
-		trav (j, i) {
-			cout << j << ' ';
-		}
-		cout << nl;
-	}
-	cout << nl;
-}
-
+ 
 void solve() {
-	unordered_map<int, vi> graph;
-	vector<vi> dists;
 	int n, m; cin >> n >> m;
+	unordered_map<int, vi> graph;
 	FOR (i, 0, m) {
 		int a, b; cin >> a >> b;
-		a--; b--;
 		graph[a].pb(b);
 		graph[b].pb(a);
 	}
-	// precompute all distances for subtask 1
-	// O(1e6)
-	dists.resize(n, vi(n, 1e9));
-	unordered_map<int, bool> vis;
+	vector<vi> dist(n+1, vi(n+1, 1e9));
+	// bfs for each distance
 	trav (i, graph) {
-		vis.clear();
+		int start = i.fir;
+		unordered_map<int, bool> vis;
 		queue<pi> que;
-		que.push({i.fir, 0});
+		que.push({start, 0});
+		vis[start] = true;
 		while (!que.empty()) {
 			pi cur = que.front(); que.pop();
-			int node=cur.fir, dist=cur.sec;
-			dists[i.fir][node] = dist;
-			vis[node] = true;
+			int node = cur.fir;
+			dist[start][node] = cur.sec;
 			trav (neigh, graph[node]) {
-				if (vis[neigh]) continue;
-				que.push({neigh, dist+1});
+				if (!vis[neigh]) {
+					vis[neigh] = true;
+					que.push({neigh, cur.sec+1});
+				}
 			}
 		}
 	}
-	// print(dists);
-
 	int q; cin >> q;
 	FOR (i, 0, q) {
 		int s, t, x, u, v, y; cin >> s >> t >> x >> u >> v >> y;
-		s--; t--; u--; v--;
-
-		if (dists[s][t] <= x || dists[u][v] <= y) {
-		    cout << "YES" << nl;
-		}
-		else if ((ll)dists[s][u] + 1 + (ll)dists[t][v] + 1 <= x+y) {
+		if (dist[s][t] <= x || dist[u][v] <= y) {
 			cout << "YES" << nl;
 		}
-		else if ((ll)dists[s][v] + 1 + (ll)dists[t][u] + 1 <= x+y) {
+		else if (dist[s][u]+1 + dist[t][v]+1 <= x+y) {
+			cout << "YES" << nl;
+		}
+		else if (dist[s][v]+1 + dist[t][u]+1 <= x+y) {
 			cout << "YES" << nl;
 		}
 		else {
-		    cout << "NO" << nl;
+			cout << "NO" << nl;
 		}
 	}
 }
@@ -159,3 +144,4 @@ int main() {
  
 	return 0;
 }
+

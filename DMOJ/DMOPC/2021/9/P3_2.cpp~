@@ -131,14 +131,14 @@ void solve() {
 	FOR (i, 0, q) {
 		int s, t, x, u, v, y; cin >> s >> t >> x >> u >> v >> y;
 		s--; t--; u--; v--;
-		
+
 		if (dists[s][t] <= x || dists[u][v] <= y) {
 		    cout << "YES" << nl;
 		}
-		else if ((ll)dists[s][u] + 1 + dists[t][v] + 1 <= x+y) {
+		else if ((ll)dists[s][u] + 1 + (ll)dists[t][v] + 1 <= x+y) {
 			cout << "YES" << nl;
 		}
-		else if ((ll)dists[s][v] + 1 + dists[t][u] + 1 <= x+y) {
+		else if ((ll)dists[s][v] + 1 + (ll)dists[t][u] + 1 <= x+y) {
 			cout << "YES" << nl;
 		}
 		else {
