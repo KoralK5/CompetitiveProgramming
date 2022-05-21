@@ -86,40 +86,43 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-void print(auto &a) {
-	trav (i, a) cout << i.fir << ' ' << i.sec.fir << ' ' << i.sec.sec << nl;
+vector<vll> a;
+int n, m, k;
+ll p=2147483647;
+
+ll mod_pow(ll p, ll i) {
+	ll res=1;
+	FOR (j, 1, i+1) res = (res*p)*MOD;
+	return res;
 }
 
-int score(string s) {
-	int res=0, n=sz(s); FOR (i, 0, n-1) res += (s[i]==s[i+1]);
-	return res;
+ll hsh(int x, int y) {
+	ll s = 0;
+	FOR (i, x, x+k) {
+		FOR (j, y, y+k) {
+			s = s ^ (mod_pow(p, i) + mod_pow(p, j)) * a[i][j];
+		}
+	}
+	return s;
 }
  
 void solve() {
-	int n; cin >> n;
-	vector<pair<int, pair<char, char>>> a(n);
+	// hash
+	int n, m, k; cin >> n >> m >> k;
+	a.resize(n, vll(m));
 	FOR (i, 0, n) {
-		string cur; cin >> cur;
-		a[i].fir = score(cur);
-		a[i].sec.fir = cur[0];
-		a[i].sec.sec = cur[sz(cur)-1];
+		FOR (j, 0, m) {
+			char cur; cin >> cur;
+			a[i][j] = cur-'a';
+		}
 	}
-	// keep best scoring overall, and for each last char
-	print(a);
-	int ans=0;
-	unordered_map<char, int> endScores;
-	vi bestScores(n);
-	FOR (i, 0, n) {
-		pair<int, pair<char, char>> val = a[i];
-		int score = val.fir;
-		char beg = val.sec.fir;
-		char end = val.sec.sec;
-
-		endScores[end] = max(endScores[end], max(score + (endScores[beg]>0?endScores[beg]+1:0), ans+endScores[beg]));
-
-		ans = max(ans, endScores[end]);
+	set<ll> hashes;
+	FOR (i, 0, n-k+1) {
+		FOR (j, 0, m-k+1) {
+			hashes.ins(hsh(i, j));
+		}
 	}
-	cout << ans << nl;
+	cout << sz(hashes) << nl;
 }
  
 int main() {
