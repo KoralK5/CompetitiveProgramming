@@ -90,19 +90,14 @@ void solve() {
 	int n; cin >> n;
 	vi a(n); FOR (i, 0, n) cin >> a[i];
 	sort(all(a));
-	unordered_map<int, bool> div;
-	FOR (i, 0, n) {
-		int cur = a[i];
-		bool bk = false;
-		trav (i, div) {
-			if (cur%i.fir == 0) {
-				bk = true;
-				break;
-			}
-		}
-		if (!bk) div[cur] = true;
+
+	int ans=1;
+	ll res=a[0];
+	FOR (i, 1, n) {
+		if (res%a[i] && a[i]%res) ans++;
+		res *= a[i];
 	}
-	cout << sz(div) << nl;
+	cout << ans << nl;
 }
  
 int main() {

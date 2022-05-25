@@ -84,25 +84,27 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 const int MOD = 1000000007;
 const char nl = '\n';
-const int MX = 100001; 
-
+const int MX = 5e6+1; 
+ 
 void solve() {
-	int n; cin >> n;
+	int n, ans=0; cin >> n;
 	vi a(n); FOR (i, 0, n) cin >> a[i];
 	sort(all(a));
-	unordered_map<int, bool> div;
+
+	vector<bool> mark(MX, false);
 	FOR (i, 0, n) {
 		int cur = a[i];
-		bool bk = false;
-		trav (i, div) {
-			if (cur%i.fir == 0) {
-				bk = true;
-				break;
-			}
+		if (!mark[cur]) {
+			for (int i=cur; i<MX; i+=cur) mark[i] = true;
+			ans++;
+			// cout << cur << nl;
 		}
-		if (!bk) div[cur] = true;
 	}
-	cout << sz(div) << nl;
+	/*
+	FOR (i, 0, 17) cout << mark[i] << ' ';
+	cout << nl;
+	*/
+	cout << ans << nl;
 }
  
 int main() {
@@ -117,3 +119,4 @@ int main() {
  
 	return 0;
 }
+
