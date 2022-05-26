@@ -91,118 +91,61 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-int n, k, q; 
+int n, k, q;
 vi a;
-
-/*
-bool check(int x, int y) {
-	vector<vector<bool>> rel(k+1, vector<bool>(k+1));
-	FOR (i, x, y) {
-		int cur=a[i], nxt=a[i+1];
-		if (cur == nxt) return false;
-
-		if (rel[cur][nxt] && (i%2)) return false;
-		if (rel[nxt][cur] && !(i%2)) return false;
-
-		// nxt > cur
-		if (i%2) rel[nxt][cur] = true;
-
-		// nxt < cur
-		else rel[cur][nxt] = true;
-	}
-	return true;
-}
-*/
-
-bool valid(int x, int y, vi mp) {
-	bool gt=(a[x]>a[y]);
-	FOR (i, x, y) {
-		int cur=mp[a[i]], nxt=mp[a[i+1]];
-
-		if (cur == nxt) return false;
-		if (gt ^ (cur>nxt)) return false;
-		gt = !gt;
-	}
-	return true;
-}
-
-bool check3(int x, int y) {
-	vi mp(3);
-	FOR (a, 0, 3) {
-		FOR (b, 0, 3) {
-			if (a==b) continue;
-			FOR (c, 0, 3) {
-				if (c==b || c==a) continue;
-				mp[0] = a;
-				mp[1] = b;
-				mp[2] = c;
-				if (valid(x, y, mp)) return true;
-			}
-		}
-	}
-	return false;
-}
-
-bool check4(int x, int y) {
-	vi mp(4);
-	FOR (a, 0, 4) {
-		FOR (b, 0, 4) {
-			if (a==b) continue;
-			FOR (c, 0, 4) {
-				if (c==b || c==a) continue;
-				FOR (d, 0, 4) {
-					if (d==c || d==b || d==a) continue;
-					mp[0] = a;
-					mp[1] = b;
-					mp[2] = c;
-					mp[3] = d;
-					if (valid(x, y, mp)) return true;
-				}
-			}
-		}
-	}
-	return false;
-}
-
-bool check5(int x, int y) {
-	vi mp(5);
-	FOR (a, 0, 5) {
-		FOR (b, 0, 5) {
-			if (a==b) continue;
-			FOR (c, 0, 5) {
-				if (c==b || c==a) continue;
-				FOR (d, 0, 5) {
-					if (d==c || d==b || d==a) continue;
-					FOR (e, 0, 5) {
-						if (e==d || e==c || e==b || e==a) continue;
-						mp[0] = a;
-						mp[1] = b;
-						mp[2] = c;
-						mp[3] = d;
-						mp[4] = e;
-						if (valid(x, y, mp)) return true;
-					}
-				}
-			}
-		}
-	}
-	return false;
-}
 
 bool check2(int x, int y) {
 	FOR (i, x, y) if (a[i] == a[i+1]) return false;
 	return true;
 }
+
+bool check(int x, int y) {
+	vi vals(k, -1);
+	vals[a[x]] = 1e6;
+	FOR (i, x, y) {
+		if (a[i] == a[i+1]) return false;
+
+		// a[i] > a[i+1]
+		if (i%2) {
+			if (vals[a[i+1]] == -1) {
+				vals[a[i+1]] = vals[a[x]] - (rng()%int(1e5) + 1);
+			}
+			else if (vals[a[i]] < vals[a[i+1]]) {
+				// dbg(vals);
+				return false;
+			}
+		}
+		// a[i] < a[i+1]
+		else {
+			if (vals[a[i+1]] == -1) {
+				vals[a[i+1]] = vals[a[x]] + (rng()%int(1e5) + 1);
+			}
+			else if (vals[a[i]] > vals[a[i+1]]) {
+				// dbg(vals);
+				return false;
+			}
+		}
+	}
+	// dbg(vals);
+	return true;
+}
+
+bool rng_check(int x, int y) {
+	FOR (i, 0, 50) if (check(x, y)) return true;
+	return false;
+}
  
 void solve() {
 	cin >> n >> k >> q;
-	a.resize(n); FOR (i, 0, n) cin >> a[i];
+	a.resize(n);
+	FOR (i, 0, n) {
+		cin >> a[i];
+		a[i]--;
+	}
 	FOR (i, 0, q) {
 		int x, y; cin >> x >> y; x--; y--;
 		if (k == 2) cout << (check2(x, y)?"YES":"NO") << nl;
-		if (k == 3) cout << (check3(x, y)?"YES":"NO") << nl;
-		if (k == 4) cout << (check4(x, y)?"YES":"NO") << nl;
-		if (k == 5) cout << (check5(x, y)?"YES":"NO") << nl;
+		else cout << (rng_check(x, y)?"YES":"NO") << nl;
 	}
 }
  
