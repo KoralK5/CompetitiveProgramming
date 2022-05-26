@@ -80,7 +80,7 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 
 #ifdef DEBUG
-#define dbg(x...) cerr <<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << endl;
+#define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
 #else
 #define dbg(x...)
 #endif
@@ -92,6 +92,8 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
+ 
+ 
 }
  
 int main() {

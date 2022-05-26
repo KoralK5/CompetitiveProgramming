@@ -92,6 +92,46 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
+	// check the last element
+	int n; cin >> n;
+	char c; cin >> c;
+	string s; cin >> s;
+
+	bool diff=false;
+	trav (i, s) {
+		if (i != c) {
+			diff = true;
+			break;
+		}
+	}
+	if (!diff) {
+		cout << 0 << nl;
+		return;
+	}
+	if (s[n-1] == c) {
+		cout << 1 << nl;
+		cout << n << nl;
+		return;
+	}
+	for (int i=n-1; i>=0; i--) {
+		if (s[i] == c) {
+			bool wk = true;
+			int loc=i+1;
+			FOR (j, 0, n) {
+				if ((j+1)%loc == 0 && s[j] != c) {
+					wk = false;
+					break;
+				}
+			}
+			if (!wk) continue;
+
+			cout << 1 << nl;
+			cout << loc << nl;
+			return;
+		}
+	}
+	cout << 2 << nl;
+	cout << n << ' ' << n-1 << nl;
 }
  
 int main() {
@@ -99,10 +139,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

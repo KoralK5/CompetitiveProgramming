@@ -92,6 +92,8 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
+	ll n; cin >> n;
+	cout << -n+1 << ' ' << n << nl;
 }
  
 int main() {
@@ -99,10 +101,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

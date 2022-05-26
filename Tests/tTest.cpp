@@ -80,7 +80,7 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 
 #ifdef DEBUG
-#define dbg(x...) cerr <<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << endl;
+#define dbg(x...) cerr << __func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << endl;
 #else
 #define dbg(x...)
 #endif
@@ -90,8 +90,12 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
+
 void solve() {
+	vi a = {1, 2, 3, 4};
+	dbg(a);
+
+cout << "This text is bold, like me.\n";
 }
  
 int main() {
@@ -106,3 +110,4 @@ int main() {
  
 	return 0;
 }
+
