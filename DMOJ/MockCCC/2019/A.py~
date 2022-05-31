@@ -1,0 +1,3 @@
+a = int(input())
+b = int(input())
+print('cs452' if a>b else ('phil145'if a<b else ''), end='')
