@@ -94,7 +94,7 @@ const int MX = 100001;
 void solve() {
 	// p[i] != i
 	int n; cin >> n;
-	unordered_map<int, vi> idx;
+	map<int, vi> idx;
 	FOR (i, 0, n) {
 		int cur; cin >> cur;
 		idx[cur].pb(i);
