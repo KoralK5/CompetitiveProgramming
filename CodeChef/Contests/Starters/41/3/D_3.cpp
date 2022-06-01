@@ -99,6 +99,16 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
+	ll n, k; cin >> n >> k;
+	if (k == 1) {
+		cout << (n%2?"ODD":"EVEN") << nl;
+		return;
+	}
+	if (k == 2) {
+		cout << "ODD" << nl;
+		return;
+	}
+	cout << "EVEN" << nl;
 }
  
 int main() {
@@ -106,10 +116,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

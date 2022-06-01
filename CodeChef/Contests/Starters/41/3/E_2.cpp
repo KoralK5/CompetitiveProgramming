@@ -99,6 +99,65 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
+	int n; cin >> n;
+	vi a(n);
+	bool zr=false;
+	unordered_map<int, bool> seenI;
+	FOR (i, 0, n) {
+		cin >> a[i];
+		if (seenI[a[i]]) zr = true;
+		seenI[a[i]] = true;
+	}
+	if (!zr) {
+		cout << 0 << nl;
+		return;
+	}
+
+	int ans=1e9;
+	unordered_map<int, bool> seen1;
+	FOR (i, 0, n) {
+		if (seen1[a[i]]) {
+			ans = min(ans, n-i);
+			break;
+		}
+		seen1[a[i]] = true;
+	}
+
+	unordered_map<int, bool> seen2;
+	for (int i=n-1; i>=0; i--) {
+		if (seen2[a[i]]) {
+			ans = min(ans, i+1);
+			break;
+		}
+		seen2[a[i]] = true;
+	}
+
+	unordered_map<int, bool> seen3;
+	queue<int> idxs;
+	for (int i=n-1; i>=0; i--) {
+		if (seen3[a[i]]) {
+			idxs.push(i);
+		}
+		seen3[a[i]] = true;
+	}
+
+	// 2-ptr left up to i
+	while (!idxs.empty()) {
+		int i = idxs.front(); idxs.pop();
+		unordered_map<int, bool> seen;
+		FOR (j, i+1, n) {
+			if (seen[a[j]]) {
+				int l = i+1;
+				int r = n-j;
+				ans = min(ans, l*2 + r);
+				ans = min(ans, r*2 + l);
+				// dbg(ans); dbg(l); dbg(r);
+				break;
+			}
+			seen[a[j]] = true;
+		}
+	}
+	cout << ans << nl;
 }
  
 int main() {
@@ -106,10 +165,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

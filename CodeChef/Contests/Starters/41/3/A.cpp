@@ -99,6 +99,10 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
+	int pa, pb, qa, qb; cin >> pa >> pb >> qa >> qb;
+	if (max(pa, pb) > max(qa, qb)) cout << 'Q' << nl;
+	else if (max(pa, pb) < max(qa, qb)) cout << 'P' << nl;
+	else cout << "TIE" << nl;
 }
  
 int main() {
@@ -106,10 +110,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

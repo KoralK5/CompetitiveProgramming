@@ -97,8 +97,39 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+/*
+odd even -> even
+even even -> even
+even even -> odd
+odd even -> even
+*/
  
 void solve() {
+	ll n, k; cin >> n >> k;
+	if (n == 1) {
+		cout << "ODD" << nl;
+		return;
+	}
+	if (k == 1) {
+		cout << (n%2?"ODD":"EVEN") << nl;
+		return;
+	}
+	if (k%2 == 0) cout << "EVEN" << nl;
+	else cout << "ODD" << nl;
+	/*
+	if (n == 3 || k == 3) {
+		if (k%3 == 1) cout << "ODD" << nl;
+		else cout << "EVEN" << nl;
+		return;
+	}
+	if (n%2 == 0) {
+		cout << (k%2?"EVEN":"ODD") << nl;
+	}
+	else {
+		cout << (k%2?"ODD":"EVEN") << nl;
+	}
+	*/
 }
  
 int main() {
@@ -106,10 +137,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

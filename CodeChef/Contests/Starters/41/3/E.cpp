@@ -97,8 +97,34 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
+
+/*
+ * find all distances needed to travel from right, then left, and add right
+ * do the same thing with left first
+*/
  
 void solve() {
+	int n; cin >> n;
+	vi a(n); FOR (i, 0, n) cin >> a[i];
+
+	unordered_map<int, bool> seen;
+	vi rDist;
+	for (int i=n-1; i>=0; i--) {
+		if (seen[a[i]]) rDist.pb(i+1);
+		seen[a[i]] = true;
+	}
+
+	unordered_map<int, bool> seen2;
+	vi lDist;
+	FOR (i, 0, n) {
+		if (seen2[a[i]]) lDist.pb(i+1);
+		seen2[a[i]] = true;
+	}
+	lDist.insert(lDist.begin(), 0);
+	rDist.pb(0);
+
+	dbg(rDist);
+	dbg(lDist);
 }
  
 int main() {
@@ -106,10 +132,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+

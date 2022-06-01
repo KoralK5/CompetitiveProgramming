@@ -86,6 +86,10 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+ 
+const int MOD = 1000000007;
+const char nl = '\n';
+const int MX = 100001; 
 
 struct custom_hash {
     size_t operator()(uint64_t x) const {
@@ -93,12 +97,31 @@ struct custom_hash {
         return x ^ (x >> 16);
     }
 };
- 
-const int MOD = 1000000007;
-const char nl = '\n';
-const int MX = 100001; 
- 
+
 void solve() {
+	// p[i] != i
+	int n; cin >> n;
+	unordered_map<int, vi, custom_hash> idx;
+	FOR (i, 0, n) {
+		int cur; cin >> cur;
+		idx[cur].pb(i);
+	}
+	vi res(n);
+	trav (i, idx) {
+		if (sz(i.sec) == 1) {
+			cout << -1 << nl;
+			return;
+		}
+		int m=sz(i.sec);
+		FOR (j, 0, m) {
+			if (j != m-1)
+				res[i.sec[j]] = i.sec[j+1];
+			else
+				res[i.sec[j]] = i.sec[0];
+		}
+	}
+	trav (i, res) cout << i+1 << ' ';
+	cout << nl;
 }
  
 int main() {
@@ -106,10 +129,11 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }
  
 	return 0;
 }
+
