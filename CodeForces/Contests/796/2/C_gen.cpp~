@@ -99,32 +99,11 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
-	ll n, k; cin >> n >> k;
-	vll a(n); FOR (i, 0, n) cin >> a[i];
-	vll psa(n+1); psa[0] = 0;
-	FOR (i, 1, n+1) psa[i] = psa[i-1] + a[i-1];
-	// dbg(psa);
-
-	ll ans=0;
-	FOR (i, 1, n+1) {
-		if (i+k-1 <= n) ckmax(ans, psa[i+k-1] - psa[i-1]);
-		else ckmax(ans, psa[n] - psa[i-1]);
-	}
-
-    if (k <= n){
-		cout << ans + k*(k-1)/2 << nl;
-	} 
-	else {
-        ll p = k-1;
-        int g = n-1;
-        while (g) {
-            ans += p;
-            g--;
-            p--;
-        }
-		ans += p;
-		cout << ans << nl;
-    }
+	cout << 1 << nl;
+	int n = rng()%int(2e5) + 1;
+	cout << n << nl;
+	FOR (i, 0, n) cout << rng()%int(1e9) + 1 << ' ';
+	cout << nl;
 }
  
 int main() {
@@ -132,7 +111,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-	cin >> T;
+//    cin >> T;
     while(T--) {
         solve();
     }
