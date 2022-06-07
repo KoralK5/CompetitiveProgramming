@@ -132,6 +132,7 @@ void solve() {
 	for (int i=0; i<sz(rem); i+=2) {
 		ans += (rem[i]+rem[i+1])/k;
 	}
+	if (sz(rem)%2) ans += (rem[sz(rem)-1]+k-4)/k;
 	cout << ans << nl;
 }
  

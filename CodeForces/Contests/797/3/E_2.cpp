@@ -98,42 +98,23 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
  
-// greedily make everything a power
-// k is really small
 void solve() {
-	int n, k; cin >> n >> k;
-	unordered_map<int, multiset<int>> div;
-	vi a(n);
-	FOR (i, 0, n) {
-		cin >> a[i];
-		div[a[i]%k].ins(a[i]);
-	}
-	// dbg(div);
-	vi rem;
-	int ans=0;
-	trav (i, div) {
-		vi v1(div[i.fir%k].begin(), div[i.fir%k].end());
-		vi v2(div[k-i.fir%k].begin(), div[k-i.fir%k].end());
-		
-		int m = min(sz(v1), sz(v2));
-		FOR (j, 0, m) {
-			ans += (v1[j] + v2[j])/k;
+	int n, k, ans=0; cin >> n >> k;
+	vi a(n); FOR (i, 0, n) cin >> a[i];
+	sort(all(a), greater<int>());
+	FOR (i, 0, sz(a)) {
+		FOR (j, i+1, sz(a)) {
+			if ((a[i]+a[j])%k == 0) {
+				ans += (a[i]+a[j])/k;
+				a.erase(a.begin()+j);
+				a.erase(a.begin()+i);
+				break;
+			}
 		}
-		rem.ins(rem.begin(), v1.begin()+m, v1.end());
-		rem.ins(rem.begin(), v2.begin()+m, v2.end());
-		multiset<int> nDiv;
-		div[i.fir%k] = nDiv;
-		div[k-i.fir%k] = nDiv;
-
-		// dbg(v1);
-		// dbg(v2);
-		// dbg(rem);
 	}
-	for (int i=0; i<sz(rem); i+=2) {
-		ans += (rem[i]+rem[i+1])/k;
-	}
-	if (sz(rem)%2) ans += (rem[sz(rem)-1]+k-3)/k;
-	cout << ans << nl;
+	int res=0;
+	for (int i=0; i<sz(a); i+=2) res += (a[i]+a[i+1])/k;
+	cout << ans + res << nl;
 }
  
 int main() {
