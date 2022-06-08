@@ -99,9 +99,10 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
-	int n, k, ans=0; cin >> n >> k;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
-	sort(all(a), greater<int>());
+	int n, k; cin >> n >> k;
+	ll ans=0;
+	vll a(n); FOR (i, 0, n) cin >> a[i];
+	sort(all(a), greater<ll>());
 	FOR (i, 0, sz(a)) {
 		FOR (j, i+1, sz(a)) {
 			if ((a[i]+a[j])%k == 0) {
@@ -112,7 +113,7 @@ void solve() {
 			}
 		}
 	}
-	int res=0;
+	ll res=0;
 	for (int i=0; i<sz(a); i+=2) res += (a[i]+a[i+1])/k;
 	cout << ans + res << nl;
 }
