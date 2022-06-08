@@ -111,28 +111,40 @@ void solve() {
 	// dbg(div);
 	vi rem;
 	int ans=0;
-	trav (i, div) {
-		vi v1(div[i.fir%k].begin(), div[i.fir%k].end());
-		vi v2(div[k-i.fir%k].begin(), div[k-i.fir%k].end());
-		
-		int m = min(sz(v1), sz(v2));
-		FOR (j, 0, m) {
-			ans += (v1[j] + v2[j])/k;
-		}
-		rem.ins(rem.begin(), v1.begin()+m, v1.end());
-		rem.ins(rem.begin(), v2.begin()+m, v2.end());
-		multiset<int> nDiv;
-		div[i.fir%k] = nDiv;
-		div[k-i.fir%k] = nDiv;
+	FOR (v, 0, k) {
+		pi i; i.fir=v;
+		int loc1 = i.fir%k;
+		int loc2 = k-i.fir;
+		// if (i.fir == 0) loc2 = k-1;
 
-		// dbg(v1);
-		// dbg(v2);
-		// dbg(rem);
+		if (loc1 == loc2) {
+			trav (j, div[loc1]) rem.pb(j);
+			continue;
+		}
+		// dbg(loc1);
+		// dbg(loc2);
+		while (!div[loc1].empty() && !div[loc2].empty()) {
+			int c1 = *div[loc1].begin();
+			int c2 = *div[loc2].begin();
+			ans += (c1 + c2)/k;
+
+			div[loc1].erase(div[loc1].begin());
+			div[loc2].erase(div[loc2].begin());
+		}
+		if (!div[loc1].empty()) {
+			trav (j, div[loc1]) rem.pb(j);
+			multiset<int> nDiv;
+			div[loc1] = nDiv;
+		}
+		if (!div[loc2].empty()) {
+			trav (j, div[loc2]) rem.pb(j);
+			multiset<int> nDiv;
+			div[loc2] = nDiv;
+		}
 	}
-	for (int i=0; i<sz(rem); i+=2) {
+	for (int i=0; i<sz(rem)-1; i+=2) {
 		ans += (rem[i]+rem[i+1])/k;
 	}
-	if (sz(rem)%2) ans += (rem[sz(rem)-1]+k-3)/k;
 	cout << ans << nl;
 }
  
