@@ -103,26 +103,18 @@ const int MX = 100001;
 void solve() {
 	int n, k; cin >> n >> k;
 	unordered_map<int, multiset<int>> div;
-	vi zer, kn;
-	vi a(n), rem;
+	vi rem, kn;
 	FOR (i, 0, n) {
-		cin >> a[i];
-		if (a[i] == 0) zer.pb(a[i]);
-		else if (a[i]%k == 0) kn.pb(a[i]);
-		else div[a[i]%k].ins(a[i]);
+		int cur; cin >> cur;
+		if (cur == 0) rem.pb(cur);
+		else if (cur%k == 0) kn.pb(cur);
+		else div[cur%k].ins(cur);
 	}
 	int ans=0;
-	sort(all(kn), greater<int>());
-	FOR (i, 0, min(sz(zer), sz(kn))) {
-		ans += kn[i]/2;
+	for (int i=0; i<sz(kn)-1; i+=2) {
+		ans += (kn[i]+kn[i+1])/k;
 	}
-	if (sz(kn) > sz(zer)) {
-		for (int i=sz(zer); i<sz(kn)-1; i+=2) {
-			ans += (kn[i]+kn[i+1])/k;
-		}
-		if (sz(kn)%2) rem.pb(kn[sz(kn)-1]);
-	}
-	// dbg(div);
+	if (sz(kn)%2) rem.pb(kn[sz(kn)-1]);
 	FOR (v, 1, k/2+1) {
 		int loc1 = v%k;
 		int loc2 = k-v;
@@ -145,12 +137,10 @@ void solve() {
 			sm[ci] += j;
 			ci++;
 		}
-		// dbg(div[loc1]);
-		// dbg(div[loc2]);
-		// dbg(sm);
 		FOR (j, 0, mi) ans += sm[j]/k;
 		FOR (j, mi, m) rem.pb(sm[j]);
 	}
+	// find best pairs
 	// dbg(rem);
 	for (int i=0; i<sz(rem)-1; i+=2) {
 		ans += (rem[i]+rem[i+1])/k;
