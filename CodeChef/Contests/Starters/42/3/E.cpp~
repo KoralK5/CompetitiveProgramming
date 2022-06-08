@@ -110,19 +110,24 @@ ll p2(ll x) {
 
 void solve() {
 	ll n, k; cin >> n >> k;
-	ll ub = p2(n)*2-1;
+	ll ub = pow(2, 32)-1;
+
 	// greedily remove the largest bit
-	int ans=__builtin_popcount(ub);
-	for (int i=33; i>=0; i--) {
-		ll num = pow(2, i);
-		while (ub-num > k) {
+	ll ans = 32*n;
+	// dbg(ans);
+	ub *= n;
+	for (ll i=32; i>=0; i--) {
+		ll num = pow((ll)2, i);
+		while (ub-num >= k) {
 			ub -= num;
 			ans--;
 		}
+		// dbg(ub);
+		// dbg(num);
 		if (ub == k) break;
 	}
 	// dbg(ub);
-	cout << ans+2 << nl;
+	cout << ans << nl;
 }
  
 int main() {
