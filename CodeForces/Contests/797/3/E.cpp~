@@ -103,45 +103,55 @@ const int MX = 100001;
 void solve() {
 	int n, k; cin >> n >> k;
 	unordered_map<int, multiset<int>> div;
-	vi a(n);
+	vi zer, kn;
+	vi a(n), rem;
 	FOR (i, 0, n) {
 		cin >> a[i];
-		div[a[i]%k].ins(a[i]);
+		if (a[i] == 0) zer.pb(a[i]);
+		else if (a[i]%k == 0) kn.pb(a[i]);
+		else div[a[i]%k].ins(a[i]);
+	}
+	int ans=0;
+	sort(all(kn), greater<int>());
+	FOR (i, 0, min(sz(zer), sz(kn))) {
+		ans += kn[i]/2;
+	}
+	if (sz(kn) > sz(zer)) {
+		for (int i=sz(zer); i<sz(kn)-1; i+=2) {
+			ans += (kn[i]+kn[i+1])/k;
+		}
+		if (sz(kn)%2) rem.pb(kn[sz(kn)-1]);
 	}
 	// dbg(div);
-	vi rem;
-	int ans=0;
-	FOR (v, 0, k) {
-		pi i; i.fir=v;
-		int loc1 = i.fir%k;
-		int loc2 = k-i.fir;
-		// if (i.fir == 0) loc2 = k-1;
-
+	FOR (v, 1, k/2+1) {
+		int loc1 = v%k;
+		int loc2 = k-v;
 		if (loc1 == loc2) {
-			trav (j, div[loc1]) rem.pb(j);
+			vi res; trav (j, div[loc1]) res.pb(j);
+			for (int i=0; i<sz(res)-1; i+=2) ans += (res[i] + res[i+1])/k;
+			if (sz(res)%2) rem.pb(res[sz(res)-1]);
 			continue;
 		}
-		// dbg(loc1);
-		// dbg(loc2);
-		while (!div[loc1].empty() && !div[loc2].empty()) {
-			int c1 = *div[loc1].begin();
-			int c2 = *div[loc2].begin();
-			ans += (c1 + c2)/k;
-
-			div[loc1].erase(div[loc1].begin());
-			div[loc2].erase(div[loc2].begin());
+		int m = max(sz(div[loc1]), sz(div[loc2]));
+		int mi = min(sz(div[loc1]), sz(div[loc2]));
+		int ci=0;
+		vi sm(m, 0);
+		trav (j, div[loc1]) {
+			sm[ci] += j;
+			ci++;
 		}
-		if (!div[loc1].empty()) {
-			trav (j, div[loc1]) rem.pb(j);
-			multiset<int> nDiv;
-			div[loc1] = nDiv;
+		ci=0;
+		trav (j, div[loc2]) {
+			sm[ci] += j;
+			ci++;
 		}
-		if (!div[loc2].empty()) {
-			trav (j, div[loc2]) rem.pb(j);
-			multiset<int> nDiv;
-			div[loc2] = nDiv;
-		}
+		// dbg(div[loc1]);
+		// dbg(div[loc2]);
+		// dbg(sm);
+		FOR (j, 0, mi) ans += sm[j]/k;
+		FOR (j, mi, m) rem.pb(sm[j]);
 	}
+	// dbg(rem);
 	for (int i=0; i<sz(rem)-1; i+=2) {
 		ans += (rem[i]+rem[i+1])/k;
 	}
