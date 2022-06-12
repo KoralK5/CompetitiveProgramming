@@ -141,7 +141,6 @@ void solve() {
 		FOR (j, mi, m) rem.pb(sm[j]);
 	}
 	// find best pairs
-	// dbg(rem);
 	for (int i=0; i<sz(rem)-1; i+=2) {
 		ans += (rem[i]+rem[i+1])/k;
 	}
