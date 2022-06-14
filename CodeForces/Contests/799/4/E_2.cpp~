@@ -99,44 +99,24 @@ const char nl = '\n';
 const int MX = 100001; 
  
 void solve() {
-	int n, s; cin >> n >> s;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
-	int cnt = accumulate(all(a), 0);
-	if (cnt < s) {
-		cout << -1 << nl;
-		return;
-	}
-	if (cnt == s) {
-		cout << 0 << nl;
-		return;
-	}
-	vll dist(n, 1e8);
-	int d=1e8;
-	FOR (i, 0, n) {
-		if (a[i]) d = 1;
-		else d++;
-		dist[i] = d;
-	}
-	vll distB(n, 1e8);
-	d=1e8;
-	for (int i=n-1; i>=0; i--) {
-		if (a[i]) d = 1;
-		else d++;
-		distB[i] = d;
-	}
-	ll ans=0, l=0, r=n-1;
-	while (cnt != s) {
-		if (r>=0 && dist[r] <= distB[l]) {
-			cnt -= a[r];
-			r--;
-		}
-		else {
-			cnt -= a[l];
-			l++;
-		}
-		ans++;
-	}
-	cout << ans << nl;
+    int n, s; cin >> n >> s;
+    int ans = -1;
+    vi a(n); F0R(i, n) cin >> a[i];
+    int p = 0;
+    int t = 0;
+    F0R(i, n) {
+        while (p < n && t + a[p] <= s) {
+            t += a[p]; p++;
+        }
+        if (t == s) {
+            ckmax(ans, p - i);
+        }
+        t -= a[i];
+    }
+    if (ans == -1) {
+        cout << ans << nl; return;
+    }
+    cout << n-ans << nl;
 }
  
 int main() {
