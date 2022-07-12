@@ -112,7 +112,7 @@ void solve() {
 		dp[i][0] = dp[i-1][0] + a[i] - k;
 		FOR (j, 1, 60) {
 			if (dp[i-1][j-1]) {
-				dp[i][j] = dp[i-1][j-1] + a[i]/(pow(2, j));
+				dp[i][j] = dp[i-1][j-1] + (a[i]>>j);
 			}
 			else {
 				break;
