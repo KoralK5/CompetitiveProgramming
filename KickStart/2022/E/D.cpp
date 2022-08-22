@@ -144,26 +144,34 @@ ll goWest(ll coins) {
 	return coins;
 }
 
-vector<vector<vll>> dp;
+vector<vector<vector<vll>>> dp; // time, x, y, pizza remaining, money
+map<pi, ll> pizzas;
+map<pi, int> idxs;
 
-ll dfs(int x, int y, int time, ll coins) {
-	if (coins <= dp[time][x][y]) return dp[time][x][y];
+ll dfs(int x, int y, int time, int pizza, ll coins) {
+	int val = idxs[mp(x, y)];
+	if (val && ((pizza>>(val-1)) & 1)) {
+		pizza &= ~(1<<(val-1));
+		coins += pizzas[mp(x, y)];
+	}
 
-	ckmax(dp[time][x][y], coins);
-	if (time >= m) return dp[time][x][y];
+	if (coins <= dp[time][x][y][pizza]) return dp[time][x][y][pizza];
 
-	ll best = dfs(x, y, time+1, coins);
+	ckmax(dp[time][x][y][pizza], coins);
+	if (time >= m) return coins;
+
+	ll best = dfs(x, y, time+1, pizza, coins);
 	if (x+1 <= n) {
-		ckmax(best, dfs(x+1, y, time+1, goSouth(coins)));
+		ckmax(best, dfs(x+1, y, time+1, pizza, goSouth(coins)));
 	}
 	if (y+1 <= n) {
-		ckmax(best, dfs(x, y+1, time+1, goEast(coins)));
+		ckmax(best, dfs(x, y+1, time+1, pizza, goEast(coins)));
 	}
 	if (x-1 > 0) {
-		ckmax(best, dfs(x-1, y, time+1, goNorth(coins)));
+		ckmax(best, dfs(x-1, y, time+1, pizza, goNorth(coins)));
 	}
 	if (y-1 > 0) {
-		ckmax(best, dfs(x, y-1, time+1, goWest(coins)));
+		ckmax(best, dfs(x, y-1, time+1, pizza, goWest(coins)));
 	}
 	
 	return best;
@@ -174,7 +182,7 @@ void print(auto a) {
 	trav (i, a) {
 		trav (j, i) {
 			trav (k, j) {
-				if (k > -1e9) cout << k << ' ';
+				if (k[0] > -1e9) cout << k[0] << ' ';
 				else cout << 'x' << ' ';
 			}
 			cout << nl;
@@ -187,8 +195,10 @@ void print(auto a) {
 void solve() {
 	cin >> n >> p >> m >> r >> c;
 
+	pizzas.clear();
+	idxs.clear();
 	dp.clear();
-	dp.resize(m+1, vector<vll>(n+1, vll(n+1, -1e9)));
+	dp.resize(m+1, vector<vector<vll>>(n+1, vector<vll>(n+1, vll(pow(2, p), -1e9))));
 
 	cin >> northOp;
 	cin >> north;
@@ -202,10 +212,26 @@ void solve() {
 	cin >> southOp;
 	cin >> south;
 
-	ll ans = dfs(r, c, 0, 0);
+	FOR (i, 0, p) {
+		int x, y; cin >> x >> y;
+		ll ci; cin >> ci;
+		pizzas[mp(x, y)] = ci;
+		idxs[mp(x, y)] = i+1;
+	}
+
+	dfs(r, c, 0, pow(2, p)-1, 0);
+
+	ll ans = -1e9;
+	trav (i, dp[m]) {
+		trav (j, i) {
+			ckmax(ans, j[0]);
+		}
+	}
 
 	// print(dp);
-	cout << ans << nl;
+
+	if (ans > -1e9) cout << ans << nl;
+	else cout << "IMPOSSIBLE" << nl;
 }
  
 int main() {
