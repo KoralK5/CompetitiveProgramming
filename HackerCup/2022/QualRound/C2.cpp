@@ -98,14 +98,25 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-// dfs with dp for every combination of morse codes
-// always use the 10 bits
-// the section connecting them is all that matters
-// O(2^10 * 2^10)
+map<set<string>, bool> dp;
+
+// check if it's ambiguous
+bool check(set<string> vals) {
+}
+
+set<string> dfs(set<string> vals, string code) {
+}
 
 void solve() {
 	int n; cin >> n;
 	string s; cin >> s;
+
+	set<string> codes;
+	codes.ins(s);
+
+	set<string> res = dfs(codes, "");
+	cout << nl;
+	trav (i, res) cout << i << nl;
 }
  
 int main() {
