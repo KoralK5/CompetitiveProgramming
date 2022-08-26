@@ -98,33 +98,47 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-map<set<string>, bool> dp;
-
-// check if it's ambiguous
-bool check(set<string> vals) {
-}
-
-set<string> dfs(set<string> vals, string code) {
+bool check(string a, string b) {
+	// return true;
+	if (sz(a) > sz(b)) swap(a, b);
+	if (sz(b)%sz(a)) return true;
+	for (int i=0; i<=sz(b)-sz(a); i+=sz(a)) {
+		if (b.substr(i, sz(a)) != a) return true;
+	}
+	return false;
 }
 
 void solve() {
 	int n; cin >> n;
 	string s; cin >> s;
-
-	set<string> codes;
-	codes.ins(s);
-
-	set<string> res = dfs(codes, "");
 	cout << nl;
-	trav (i, res) cout << i << nl;
+	while (n > 1) {
+		string cur(10, '.');
+		cur[0] = '-';
+		cur[9] = '-';
+		FOR (i, 0, pow(2, 8)) {
+			FOR (j, 1, 9) {
+				if (i & (1<<(j-1))) cur[j] = '-';
+				else cur[j] = '.';
+			}
+			if (!check(s, cur)) {
+				// dbg(mp(s, cur));
+				continue;
+			}
+
+			cout << cur << nl;
+			n--;
+			if (n == 1) return;
+		}
+	}
 }
  
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
 
-	// freopen("second_meaning_input.txt", "r", stdin);
-	// freopen("C1.txt", "w", stdout);    
+	freopen("second_second_meaning_input.txt", "r", stdin);
+	freopen("C2.txt", "w", stdout);    
  
     int T = 1;
 	cin >> T;
