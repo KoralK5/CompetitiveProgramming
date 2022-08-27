@@ -102,20 +102,28 @@ void solve() {
 	int n, m, q; cin >> n >> m >> q;
 
 	vector<map<int, ll>> graph(n+1);
+	map<pi, ll> cost;
 	FOR (i, 0, m) {
 		int a, b; cin >> a >> b;
 		ll c; cin >> c;
 		graph[a][b] = c;
 		graph[b][a] = c;
+		cost[mp(a, b)] = 2*c;
+		cost[mp(b, a)] = 2*c;
+	}
+
+	FOR (i, 1, n+1) {
+		trav (neigh, graph[i]) {
+			trav (neigh2, graph[neigh.fir]) {
+				if (i == neigh2.fir) continue;
+				cost[mp(i, neigh2.fir)] += min(neigh.sec, neigh2.sec);
+			}
+		}
 	}
 
 	FOR (i, 0, q) {
 		int x, y; cin >> x >> y;
-		ll ans = graph[x][y]*2;
-		trav (i, graph[x]) {
-			ans += min(i.sec, graph[y][i.fir]);
-		}
-		cout << ans << ' ';
+		cout << cost[mp(x, y)] << ' ';
 	}
 	cout << nl;
 }
