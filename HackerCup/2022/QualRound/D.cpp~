@@ -101,7 +101,7 @@ const int MX = 100001;
 void solve() {
 	int n, m, q; cin >> n >> m >> q;
 
-	vector<map<int, ll>> graph(n+1), cost(n+1);
+	vector<unordered_map<int, ll>> graph(n+1), cost(n+1);
 	FOR (i, 0, m) {
 		int a, b; cin >> a >> b;
 		ll c; cin >> c;
@@ -131,8 +131,8 @@ int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
 
-	freopen("second_flight_validation_input.txt", "r", stdin);
-	freopen("D_val.txt", "w", stdout);    
+	freopen("second_flight_input.txt", "r", stdin);
+	freopen("D.txt", "w", stdout);    
  
     int T = 1;
 	cin >> T;
