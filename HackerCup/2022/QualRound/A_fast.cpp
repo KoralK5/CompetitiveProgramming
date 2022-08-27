@@ -97,48 +97,17 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
+ 
 void solve() {
-	int n, m, q; cin >> n >> m >> q;
-
-	vector<map<int, ll>> graph(n+1), cost(n+1);
-	FOR (i, 0, m) {
-		int a, b; cin >> a >> b;
-		ll c; cin >> c;
-		graph[a][b] = c;
-		graph[b][a] = c;
-		cost[a][b] = 2*c;
-		cost[b][a] = 2*c;
-	}
-
-	FOR (i, 1, n+1) {
-		trav (neigh, graph[i]) {
-			trav (neigh2, graph[neigh.fir]) {
-				if (i == neigh2.fir) continue;
-				cost[i][neigh2.fir] += min(neigh.sec, neigh2.sec);
-			}
-		}
-	}
-
-	FOR (i, 0, q) {
-		int x, y; cin >> x >> y;
-		cout << cost[x][y] << ' ';
-	}
-	cout << nl;
 }
  
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
-
-	freopen("second_flight_validation_input.txt", "r", stdin);
-	freopen("D_val.txt", "w", stdout);    
  
     int T = 1;
-	cin >> T;
-	FOR (i, 1, T+1) {
-		dbg(i);
-		cout << "Case #" << i << ": ";
+//    cin >> T;
+    while(T--) {
         solve();
     }
  

@@ -107,22 +107,43 @@ void solve() {
 		ll c; cin >> c;
 		graph[a][b] = c;
 		graph[b][a] = c;
-		cost[a][b] = 2*c;
-		cost[b][a] = 2*c;
+		
+		cost[a][b] += 2*c;
+		cost[b][a] += 2*c;
 	}
-
-	FOR (i, 1, n+1) {
-		trav (neigh, graph[i]) {
-			trav (neigh2, graph[neigh.fir]) {
-				if (i == neigh2.fir) continue;
-				cost[i][neigh2.fir] += min(neigh.sec, neigh2.sec);
-			}
-		}
+	
+	queue<pair<pi, ll>> que;
+	map<vi, bool> vis;
+	FOR (node, 1, n+1) {
+	    trav (neigh, graph[node]) {
+	        que.push(mp(mp(node, neigh.fir), neigh.sec));
+	    }
 	}
+	
+	while (!que.empty()) {
+	    pair<pi, ll> node = que.front();
+	    que.pop();
+	    
+	    int prev = node.fir.fir;
+	    int cur = node.fir.sec;
+	    ll curCost = node.sec;
+	    
+	    trav (neigh, graph[cur]) {
+	        if (vis[{prev, cur, neigh.fir}]) continue;
+	        if (vis[{neigh.fir, cur, prev}]) continue;
 
+	        ll newCost = min(curCost, neigh.sec);
+	        cost[prev][neigh.fir] += newCost;
+	        cost[neigh.fir][prev] += newCost;
+	        
+	        que.push(mp(mp(cur, neigh.fir), neigh.sec));
+	        vis[{prev, cur, neigh.fir}] = true;
+	    }
+	}
+	
 	FOR (i, 0, q) {
-		int x, y; cin >> x >> y;
-		cout << cost[x][y] << ' ';
+	    int x, y; cin >> x >> y;
+	    cout << cost[x][y] << ' ';
 	}
 	cout << nl;
 }
@@ -144,4 +165,3 @@ int main() {
  
 	return 0;
 }
-
