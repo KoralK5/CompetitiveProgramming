@@ -98,28 +98,34 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-// calculate the sum of C for all nodes connecting X to Y
-
 void solve() {
 	int n, m, q; cin >> n >> m >> q;
-	vi c(n); FOR (i, 0, n) cin >> c[i];
 
-	map<int, vi> graph;
+	vector<map<int, ll>> graph(n+1);
 	FOR (i, 0, m) {
 		int a, b; cin >> a >> b;
-		a--;
-		b--;
-		graph[a].pb(b);
-		graph[b].pb(a);
+		ll c; cin >> c;
+		graph[a][b] = c;
+		graph[b][a] = c;
 	}
+
+	FOR (i, 0, q) {
+		int x, y; cin >> x >> y;
+		ll ans = graph[x][y]*2;
+		trav (i, graph[x]) {
+			ans += min(i.sec, graph[y][i.fir]);
+		}
+		cout << ans << ' ';
+	}
+	cout << nl;
 }
  
 int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
 
-	// freopen("second_second_friend_input.txt", "r", stdin);
-	// freopen("B2.txt", "w", stdout);    
+	// freopen("second_flight_validation_input.txt", "r", stdin);
+	// freopen("D_val.txt", "w", stdout);    
  
     int T = 1;
 	cin >> T;
