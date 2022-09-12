@@ -1,19 +1,42 @@
-void dijkstra(int s) {
-	priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
-	for (int i=0; i<N; i++) dist[i] = INF;
-	dist[s] = 0;
-	pq.push(make_pair(0, s));
-	while (!pq.empty()) {
-		pair<int, int> front = pq.top();
-		pq.pop();
-		int w = front.first, u = front.second;
-		if (w > dist[u]) continue;
-		for (int i=0; i<adj[u].size(); i++) {
-			pair<int, int> v = adj[u][i];
-			if (dist[v.first] > dist[u] + v.second) {
-				dist[v.first] = dist[u] + v.second;
-				pq.push(make_pair(dist[v.first], v.first));
-			}
-		}
-	}
+unordered_map<int, vector<pair<int, int>>> graph;
+
+void addEdge(int u, int v, int dist) {
+    graph[u].push_back(make_pair(v, dist));
+}
+
+int startDijkstra(int u, int end) {
+    vector<int> dist(1e5, 1e9);
+
+    set<pair<int, int> > st;
+    st.insert(make_pair(0, u));
+    dist[u] = 0;
+
+    while (!st.egraphty()) {
+        pair<int, int> now = *st.begin();
+        st.erase(st.begin());
+
+        int v = now.second;
+        int w = now.first;
+
+        const vector<pair<int, int> > &edges = graph[v];
+        for (const pair<int, int> &to : edges) {
+            if (w + to.second < dist[to.first]) {
+                st.erase(make_pair(dist[to.first], to.first));
+                dist[to.first] = w + to.second;
+                st.insert(make_pair(dist[to.first], to.first));
+            }
+        }
+    }
+
+    return dist[end];
+}
+
+// distance from start to end
+int solve(vector<vector<int>>& edges, int start, int end) {
+    graph.clear();
+    for (vector<int> &edge : edges) {
+        addEdge(edge[0], edge[1], edge[2]);
+    }
+    int res = startDijkstra(start, end);
+    return res<1e9?res:-1;
 }
