@@ -35,9 +35,9 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  
 #define FOR(i, a, b) for (int i=a; i<(b); i++)
 #define F0R(i, a) for (int i=0; i<(a); i++)
-#define FORd(i,a,b) for (int i = (b)-1; i >= a; i--)
-#define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
-#define trav(a,x) for (auto& a : x)
+#define FORd(i, a, b) for (int i=(a)-1; i >= b; i--)
+#define F0Rd(i, a) for (int i=(a)-1; i >= 0; i--)
+#define trav(a, x) for (auto& a : x)
 #define uid(a, b) uniform_int_distribution<int>(a, b)(rng)
  
 #define sz(x) (int)(x).size()
@@ -97,25 +97,22 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-vi a;
-bool check(int n) {
-	trav (i, a) if (i%n != 0) return false;
-	return true;
-}
  
 void solve() {
 	int n; cin >> n;
-	a.resize(n); FOR (i, 0, n) cin >> a[i];
-	for (int i=1e4; i>0; i--) {
-		if (check(i)) {
-			trav (j, a) cout << j/i << ' ';
-			cout << nl;
+	vi a(n); FOR (i, 0, n) cin >> a[i];
+
+	map<int, int> freq;
+	trav (i, a) freq[i]++;
+
+	trav (i, freq) {
+		if (i.sec >= 2) {
+			cout << "YES" << nl;
 			return;
 		}
 	}
-	trav (i, a) cout << i << ' ';
-	cout << nl;
+
+	cout << (n%2?"NO":"YES") << nl;
 }
  
 int main() {
@@ -123,7 +120,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-//    cin >> T;
+	cin >> T;
     while(T--) {
         solve();
     }

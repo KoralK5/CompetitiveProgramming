@@ -98,10 +98,14 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
+string convert(int a, int b, int c) {
+	return to_string(a) + ' ' + to_string(b) + ' ' + to_string(c);
+}
+
 void solve() {
 	int n, m, q; cin >> n >> m >> q;
 
-	vector<map<int, ll>> graph(n+1), cost(n+1);
+	vector<unordered_map<int, ll>> graph(n+1), cost(n+1);
 	FOR (i, 0, m) {
 		int a, b; cin >> a >> b;
 		ll c; cin >> c;
@@ -113,12 +117,13 @@ void solve() {
 	}
 	
 	queue<pair<pi, ll>> que;
-	map<vi, bool> vis;
+	unordered_map<string, bool> vis;
 	FOR (node, 1, n+1) {
 	    trav (neigh, graph[node]) {
 	        que.push(mp(mp(node, neigh.fir), neigh.sec));
 	    }
 	}
+
 	
 	while (!que.empty()) {
 	    pair<pi, ll> node = que.front();
@@ -129,15 +134,15 @@ void solve() {
 	    ll curCost = node.sec;
 	    
 	    trav (neigh, graph[cur]) {
-	        if (vis[{prev, cur, neigh.fir}]) continue;
-	        if (vis[{neigh.fir, cur, prev}]) continue;
+	        if (vis[convert(prev, cur, neigh.fir)]) continue;
+	        if (vis[convert(neigh.fir, cur, prev)]) continue;
 
 	        ll newCost = min(curCost, neigh.sec);
 	        cost[prev][neigh.fir] += newCost;
 	        cost[neigh.fir][prev] += newCost;
 	        
 	        que.push(mp(mp(cur, neigh.fir), neigh.sec));
-	        vis[{prev, cur, neigh.fir}] = true;
+	        vis[convert(prev, cur, neigh.fir)] = true;
 	    }
 	}
 	
@@ -152,13 +157,13 @@ int main() {
     cin.tie(0)->sync_with_stdio(0); 
     cin.exceptions(cin.failbit);
 
-	freopen("second_flight_validation_input.txt", "r", stdin);
-	freopen("D_val.txt", "w", stdout);    
+	// freopen("second_flight_validation_input.txt", "r", stdin);
+	// freopen("D_val.txt", "w", stdout);    
  
     int T = 1;
 	cin >> T;
 	FOR (i, 1, T+1) {
-		dbg(i);
+		// dbg(i);
 		cout << "Case #" << i << ": ";
         solve();
     }

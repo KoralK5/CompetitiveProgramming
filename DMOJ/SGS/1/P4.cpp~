@@ -97,68 +97,41 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-// if a number doesn't work with the previous number, either won't work with another one
-// so all the numbers must have something in common
-// calculate cost to get to some big number:
-// 		every other number must be able to get to it
-// do the operation 10 times for each number, if it gets stuck, then all other numbers must less than the number it gets stuck on
-//
-// 0 loop: 10
-// 1 loop: 11 12 14 18 26 32
-// 2 loop: 12 14 18 26 32 34 38 46
-// 3 loop: 13 16 32
-// 4 loop: 14 18 26 32 34 38 46
-// 5 loop: 5 10
-// 6 loop: 16 32
-// 7 loop: 17 24 28 36 42
-// 8 loop: 18 26 32
-// 9 loop: 9 18 26 32 34 38 46
-//
-// 5s and 10s never work
-// everything else works
-
-/*
-
-1: 1 2 4 8 16 22 24 28 36 42 44 48 56
-11: 11 12 14 18 26 32 34 38 46 52
-21: 21 22 24 28 36
-
-4: 4 8 16 22 24
-6: 6 12 14 18 26 32
-
-*/
-
+ 
 void solve() {
-	int n; cin >> n;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
+	int n, m, k; cin >> n >> m >> k;
+	vi h(m), s(m);
 
-	set<int> tens, notTens;
-	trav (i, a) {
-		if (i%10 == 0) {
-			tens.ins(i);
-		}
-		else if (i%5 == 0) {
-			tens.ins(i+5);
-		}
-		else {
-			notTens.ins(i);
-		}
+	priority_queue<vi> toys;
+	FOR (i, 0, m) {
+		cin >> h[i] >> s[i];
+		toys.push({h[i], i, 0});
 	}
 
-	map<int, bool> seen;
-	trav (i, notTens) {
-		int cur = i;
-		if (seen[cur%10]) {
-			cout << "No" << nl;
-			return;
-		}
-		seen[(cur+10)%20] = true;
+	FOR (i, 0, k) {
+		int a, b, d; cin >> a >> b >> d;
 	}
 
-	if (sz(tens) == 0) cout << "Yes" << nl;
-	else if (sz(tens) == 1 && sz(notTens) == 0) cout << "Yes" << nl;
-	else cout << "No" << nl;
+	int ans = 0;
+	FOR (i, 0, n) {
+		if (toys.empty()) break;
+		vi node = toys.top();
+		toys.pop();
+
+		int happy = node[0];
+		int idx = node[1];
+		int used = node[2];
+
+		if (used+1 > s[idx]) {
+			i--;
+			continue;
+		}
+
+		ans += happy;
+		toys.push({h[idx]/(used+2), idx, used+1});
+	}
+
+	cout << ans << nl;
 }
  
 int main() {
@@ -166,7 +139,7 @@ int main() {
     cin.exceptions(cin.failbit);
  
     int T = 1;
-	cin >> T;
+//    cin >> T;
     while(T--) {
         solve();
     }

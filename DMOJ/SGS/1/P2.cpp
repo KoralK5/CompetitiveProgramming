@@ -35,9 +35,9 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  
 #define FOR(i, a, b) for (int i=a; i<(b); i++)
 #define F0R(i, a) for (int i=0; i<(a); i++)
-#define FORd(i,a,b) for (int i = (b)-1; i >= a; i--)
-#define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
-#define trav(a,x) for (auto& a : x)
+#define FORd(i, a, b) for (int i=(a)-1; i >= b; i--)
+#define F0Rd(i, a) for (int i=(a)-1; i >= 0; i--)
+#define trav(a, x) for (auto& a : x)
 #define uid(a, b) uniform_int_distribution<int>(a, b)(rng)
  
 #define sz(x) (int)(x).size()
@@ -97,14 +97,81 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
- 
+
+// a[i] > a[j]?
+bool q1(int i, int j) {
+	cout << "? " << i << ' ' << j << endl;
+	bool gt; cin >> gt;
+	return gt;
+}
+
+// v is indices, returns index of xth rank
+int q2(set<int> v, int x) {
+	cout << "$ " << sz(v) << ' ';
+	trav (i, v) cout << i << ' ';
+	cout << x << endl;
+	int y; cin >> y;
+	return y;
+}
+
+// rank of a number as the number of numbers smaller than it in the array
+//
+// binary search:
+// 		find 2^16						m queries
+// 			remove all smaller ranks	m queries
+// 		find 2^15						<m queries
+// 			remove all smaller ranks	<m queries
+// 		find 2^14						<m queries
+// 			remove all smaller ranks	<m queries
+// 		...
+// 		find 2^0						~0 queries
+// 			remove all smaller ranks
+
 void solve() {
 	int n; cin >> n;
-	vi a(n*2); FOR (i, 0, n*2) cin >> a[i];
-	sort(all(a));
-	ll ans=0;
-	FOR (i, 0, n) ans += a[i*2+1]-a[i*2];
-	cout << ans << nl;
+
+	int twos = 0;
+	FOR (i, 0, 32) {
+		if (pow(2, i) >= n) {
+			twos = i-1;
+			break;
+		}
+	}
+
+	vi ans;
+	set<int> idxs; FOR (i, 0, n) idxs.ins(i);
+
+	FORd (i, twos+1, 0) {
+		int rank = pow(2, i);
+		int idx = q2(idxs, rank);
+
+		/*
+		int idx = 0;
+		trav (i, idxs) {
+			if (!temp) {
+				idx = i;
+				break;
+			}
+			temp--;
+		}
+		*/
+
+		ans.pb(idx);
+
+		set<int> nIdxs;
+		trav (i, idxs) {
+			if (idx == i) continue;
+			bool gt = q1(idx, i);
+			if (gt) nIdxs.ins(i);
+		}
+
+		idxs = nIdxs;
+	}
+
+	reverse(all(ans));
+	cout << "! " << twos << ' ';
+	trav (i, ans) cout << i << ' ';
+	cout << nl;
 }
  
 int main() {

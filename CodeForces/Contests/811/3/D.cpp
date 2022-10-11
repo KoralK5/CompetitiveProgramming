@@ -106,7 +106,6 @@ void solve() {
 	int n; cin >> n;
 	vector<string> s(n); FOR (i, 0, n) cin >> s[i];
 
-	
 	vpi temp = {};
 	vector<pair<int, vpi>> dp(sz(t), mp(int(1e9), temp));
 

@@ -35,9 +35,9 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  
 #define FOR(i, a, b) for (int i=a; i<(b); i++)
 #define F0R(i, a) for (int i=0; i<(a); i++)
-#define FORd(i,a,b) for (int i = (b)-1; i >= a; i--)
-#define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
-#define trav(a,x) for (auto& a : x)
+#define FORd(i, a, b) for (int i=(a)-1; i >= b; i--)
+#define F0Rd(i, a) for (int i=(a)-1; i >= 0; i--)
+#define trav(a, x) for (auto& a : x)
 #define uid(a, b) uniform_int_distribution<int>(a, b)(rng)
  
 #define sz(x) (int)(x).size()
@@ -98,12 +98,22 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
  
+// find out if removing a bit is good or bad for each bit
 void solve() {
-	int n, ans=0; cin >> n;
-	FOR (i, 0, n) {
-		string s; cin >> s;
-		ans += (s=="face");
+	int n; cin >> n;
+	vi a(n); FOR (i, 0, n) cin >> a[i];
+
+	int ans = 0;
+	FOR (i, 0, 31) {
+		ll val = 0;
+		FOR (j, 0, n) {
+			ll cnt = ((ll)j+1) * (n-j);
+			if (a[j] & (1 << i)) val += cnt;
+			else val -= cnt;
+		}
+		if (val > 0) ans |= 1 << i;
 	}
+	
 	cout << ans << nl;
 }
  
