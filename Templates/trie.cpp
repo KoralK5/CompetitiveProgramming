@@ -1,48 +1,50 @@
-const int K = 26;
-
-struct Vertex {
-    int next[K];
-    bool leaf = false;
-
-    Vertex() {
-        fill(begin(next), end(next), -1);
+class TrieNode {
+public:
+    TrieNode *child[26];
+    bool isWord;
+    TrieNode() {
+        isWord = false;
+        for (auto &a : child) a = nullptr;
     }
 };
 
-vector<Vertex> trie(1);
+class Trie {
+    TrieNode *root;
 
-void add_string(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (trie[v].next[c] == -1) {
-            trie[v].next[c] = trie.size();
-            trie.emplace_back();
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(string word) {
+        TrieNode *p = root;
+        for (auto &a : word) {
+            int i = a - 'a';
+            if (!p->child[i]) p->child[i] = new TrieNode();
+            p = p->child[i];
         }
-        v = trie[v].next[c];
+        p->isWord = true;
     }
-    trie[v].leaf = true;
-}
-
-int go(int v, char ch);
-
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
+    
+    bool search(string word, bool prefix=false) {
+        TrieNode *p = root;
+        for (auto &a : word) {
+            int i = a - 'a';
+            if (!p->child[i]) return false;
+            p = p->child[i];
+        }
+        if (!prefix) return p->isWord;
+        return true;
     }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
+    
+    bool startsWith(string prefix) {
+        return search(prefix, true);
     }
-    return t[v].go[c];
-} 
+};
+
+/*
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+*/
