@@ -1,6 +1,6 @@
 # Competitive Programming
 
-Welcome to my competitive programming repository! This repository contains my competitive programming journey all the way from Python to C++.
+My competitive programming journey all the way from Python to C++.
 
 ## Contents
 
