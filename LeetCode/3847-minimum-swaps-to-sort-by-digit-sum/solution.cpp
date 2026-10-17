@@ -1,44 +1,33 @@
-struct Num {
-    int val;
-    int digitSum;
-
-    Num(int val) : val(val), digitSum(0) {
-        int temp = val;
-        while (temp) {
-            digitSum += temp % 10;
-            temp /= 10;
-        }
-    }
-
-    bool operator<(const Num& other) const {
-        if (digitSum < other.digitSum) return true;
-        if (digitSum > other.digitSum) return false;
-        return val < other.val;
-    }
-};
-
 class Solution {
+    int digitSum(int x) {
+        int res = 0;
+        while (x) {
+            res += x % 10;
+            x /= 10;
+        }
+        return res;
+    }
+
 public:
     int minSwaps(vector<int>& nums) {
         int n = nums.size();
-        unordered_map<int, int> loc;
-        for (int i=0; i<n; i++) loc[nums[i]] = i;
-        vector<Num> a(nums.begin(), nums.end());
-        sort(a.begin(), a.end());
-
-        int ans = 0;
+        vector<int> temp = nums;
+        sort(temp.begin(), temp.end(), [&](int a, int b) {
+            int da = digitSum(a);
+            int db = digitSum(b);
+            if (da < db) return true;
+            if (da > db) return false;
+            return a < b;
+        });
+        unordered_map<int, int> idx;
+        for (int i=0; i<n; i++) idx[nums[i]] = i;
+        int swaps = 0;
         for (int i=0; i<n; i++) {
-            if (nums[i] != a[i].val) {
-                int correctVal = a[i].val;
-                int oldIdx = loc[correctVal];
-                int currentVal = nums[i];
-                loc[currentVal] = oldIdx;
-                loc[correctVal] = i;
-                swap(nums[i], nums[oldIdx]);
-                ans++;
-            }
+            if (nums[i] == temp[i]) continue;
+            swap(nums[i], nums[idx[temp[i]]]);
+            swap(idx[nums[i]], idx[nums[idx[temp[i]]]]);
+            swaps++;
         }
-
-        return ans;
+        return swaps;
     }
 };
