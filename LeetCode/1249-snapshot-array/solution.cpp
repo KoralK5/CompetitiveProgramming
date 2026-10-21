@@ -1,30 +1,32 @@
 class SnapshotArray {
-    int n;
-    int snap_id{0};
-    vector<vector<pair<int, int>>> array;
-
+    int snap_id = -1;
+    unordered_map<int, int> toSet;
+    vector<vector<pair<int, int>>> arr;
 public:
-    SnapshotArray(int length) : n(length), array(length, {make_pair(0, 0)}) {}
+    SnapshotArray(int length) {
+        arr.resize(length);
+        for (auto& i : arr) i.push_back({snap_id, 0});
+    }
     
     void set(int index, int val) {
-        if (!array[index].empty() && array[index].back().first == snap_id) {
-            array[index].back().second = val;
-        }
-        else {
-            array[index].emplace_back(snap_id, val);
-        }
+        toSet[index] = val;
     }
     
     int snap() {
-        return snap_id++;
+        snap_id++;
+        for (auto& p : toSet) {
+            int index = p.first;
+            int value = p.second;
+            arr[index].push_back({snap_id, value});
+        }
+        toSet.clear();
+        return snap_id;
     }
     
     int get(int index, int snap_id) {
-        auto& arr = array[index];
-
-        auto it = upper_bound(arr.begin(), arr.end(), make_pair(snap_id, (int)1e9));
+        auto& a = arr[index];
+        auto it = lower_bound(a.begin(), a.end(), make_pair(snap_id, 1e9));
         it--;
-
         return it->second;
     }
 };
